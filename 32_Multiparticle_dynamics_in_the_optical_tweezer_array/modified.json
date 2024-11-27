@@ -1,48 +1,48 @@
 {
-    "problem_id": "32",
-    "problem_name": "Multiparticle Dynamics in the Optical Tweezer Array",
-    "problem_description_main": "Solve the evolution of phonon occupation for small oscillations of N nanospheres trapped in a linear polarized optical tweezer array along the x-axis. The system considers optical binding forces between the nanospheres.",
-    "problem_background_main": "This problem involves analyzing the dynamics of nanospheres trapped in an optical tweezer array. Using the Rayleigh approximation, the optical binding force between nanospheres is modeled as an interaction between induced dipoles. The system is linearized around equilibrium, allowing the dynamics to be represented by coupled oscillators. The phonon occupation evolution is derived using a Hamiltonian constructed from these interactions, and the dynamics are solved numerically using the fourth-order Runge-Kutta (RK4) method.",
-    "problem_io": "Input:\n    N: int, Number of trapped nanospheres.\n    t0: float, Time point for calculating the phonon occupation.\n    R: float, Distance between adjacent nanospheres.\n    l: float, Wavelength of optical traps.\n    phi: float, Polarization direction of optical traps.\n    Gamma: float, Damping coefficient of trapped nanospheres.\n    P: list[float], Power of each optical trap.\n    n0: list[float], Initial phonon occupation of each nanosphere.\n    w: float, Beam waist of optical traps.\n    a: float, Radius of nanospheres.\n    n: float, Refractive index of nanospheres.\n    rho: float, Density of nanospheres.\n\nOutput:\n    nf: list[float], Phonon occupation of each nanosphere at time t0.",
-    "required_dependencies": "import numpy as np\nfrom scipy.constants import epsilon_0, c",
-    "sub_steps": [
-        {
-            "step_number": "32.1",
-            "step_name": "Optical Binding Force Calculation",
-            "step_description_prompt": "Write a function to calculate the optical binding force between two nanospheres trapped by linearly polarized optical traps using the Rayleigh approximation.",
-            "function_header": "def binding_force(P, phi, R, l, w, a, n):",
-            "step_background": "The optical binding force is modeled using the induced dipole moments of nanospheres and the electric field they produce. The force is expressed in terms of the scalar polarizability and field propagators.",
-            "ground_truth_code": "def binding_force(P, phi, R, l, w, a, n):\n    # Implementation here\n    return F",
-            "test_cases": [
-                "assert np.allclose(binding_force([1e7, 1e8], 0, 1.55e-6, 1.55e-6, 6e-7, 1e-7, 1.444), target)"
-            ]
-        },
-        {
-            "step_number": "32.2",
-            "step_name": "Hamiltonian Generation",
-            "step_description_prompt": "Write a function to calculate the coupling constant between nanoparticles and generate the system Hamiltonian.",
-            "function_header": "def generate_Hamiltonian(P, phi, R, l, w, a, n, h, N, rho):",
-            "step_background": "Using linearized optical binding forces, the system is represented as coupled oscillators. The Hamiltonian captures resonant frequencies and coupling constants between nanospheres.",
-            "ground_truth_code": "def generate_Hamiltonian(P, phi, R, l, w, a, n, h, N, rho):\n    # Implementation here\n    return H",
-            "test_cases": [
-                "assert np.allclose(generate_Hamiltonian([1e-1]*5, np.pi/2, 1.55e-6, 1.55e-6, 6e-7, 1e-7, 1.444, 1e-6, 5, 2.648e3), target)"
-            ]
-        },
-        {
-            "step_number": "32.3",
-            "step_name": "Numerical Solution with RK4",
-            "step_description_prompt": "Write a function to numerically solve the phonon dynamics using the fourth-order Runge-Kutta method.",
-            "function_header": "def runge_kutta(C0, H, L, M, t0, steps):",
-            "step_background": "The Lindblad master equation governs the evolution of the correlation matrix, and its numerical solution provides the phonon occupation at time t0.",
-            "ground_truth_code": "def runge_kutta(C0, H, L, M, t0, steps):\n    # Implementation here\n    return nf",
-            "test_cases": [
-                "assert np.allclose(runge_kutta(C0, H, L, M, 0.02, 1e5), target)"
-            ]
-        }
-    ],
-    "general_solution": "def binding_force(P, phi, R, l, w, a, n):\n    # Implementation\n    return F\n\ndef generate_Hamiltonian(P, phi, R, l, w, a, n, h, N, rho):\n    # Implementation\n    return H\n\ndef runge_kutta(C0, H, L, M, t0, steps):\n    # Implementation\n    return nf",
-    "general_tests": [
-        "assert np.allclose(runge_kutta(C0, H, L, M, 0.02, 1e5), target)"
-    ]
+  "problem_id": "32",
+  "problem_name": "Multiparticle_dynamics_in_the_optical_tweezer_array",
+  "problem_description_main": "Compute the phonon occupation of $N$ identical nanospheres trapped by a linearly polarized optical tweezer array arranged equidistantly along the $x$-axis. The calculation considers the optical binding forces between the nanospheres and uses numerical methods for solving the system dynamics.",
+  "problem_background_main": "The system consists of $N$ nanospheres trapped by optical tweezers. Considering the optical binding forces between the spheres, the dynamics can be modeled using coupled oscillators. For small oscillations around equilibrium positions, the optical forces can be linearized, allowing the derivation of a Hamiltonian for the system. The problem involves calculating the phonon occupation evolution over time using the Lindblad master equation, numerically solved with the Runge-Kutta method.",
+  "problem_io": "Input:\nN: int, the number of nanospheres.\nt0: float, the time at which phonon occupation is calculated.\nR: float, the distance between adjacent nanospheres.\nl: float, the wavelength of optical traps.\nphi: float, the polarization angle of the traps.\nGamma: float, the damping coefficient.\nP: list of floats, powers of the optical traps.\nn0: list of floats, initial phonon occupation.\nw: float, beam waist of the optical traps.\na: float, radius of nanospheres.\nn: float, refractive index of nanospheres.\nrho: float, density of nanospheres.\nOutput:\nnf: list of floats, phonon occupation at time `t0`.",
+  "required_dependencies": "import numpy as np\nfrom scipy.constants import epsilon_0, c",
+  "sub_steps": [
+    {
+      "step_number": "32.1",
+      "step_name": "binding_force",
+      "step_description_prompt": "Write a function to calculate the optical binding force between two nanospheres using the Rayleigh approximation.",
+      "step_background": "The binding force depends on the interaction between induced dipoles in the nanospheres. The Rayleigh approximation simplifies the calculation by modeling nanospheres as dipoles induced in an external field. The force is derived from the electric field and the Green's function propagator.",
+      "ground_truth_code": "def binding_force(P, phi, R, l, w, a, n):\n    '''Calculate the optical binding force between two nanospheres.'''\n    # Code implementation here...",
+      "function_header": "def binding_force(P, phi, R, l, w, a, n):",
+      "test_cases": [
+        "# Test 1\nP = [1e7, 1e8]\nphi = 0\nR = 1.55e-6\nassert np.allclose(binding_force(P, phi, R, ...), target)",
+        "# Test 2\nP = [1e9, 1e9]\nphi = np.pi / 4\nR = 1.55e-6\nassert np.allclose(binding_force(P, phi, R, ...), target)"
+      ]
+    },
+    {
+      "step_number": "32.2",
+      "step_name": "generate_Hamiltonian",
+      "step_description_prompt": "Write a function to calculate the coupling constants and build the Hamiltonian matrix.",
+      "step_background": "The Hamiltonian models the dynamics of coupled oscillators in the system, with elements derived from the linearized optical binding forces.",
+      "ground_truth_code": "def generate_Hamiltonian(P, phi, R, l, w, a, n, h, N, rho):\n    '''Generate the Hamiltonian of the system.'''\n    # Code implementation here...",
+      "function_header": "def generate_Hamiltonian(P, phi, R, l, w, a, n, h, N, rho):",
+      "test_cases": [
+        "# Test 1\nP = [0.1, 0.1, 0.1]\nphi = np.pi / 2\nR = 1.55e-6\nassert np.allclose(generate_Hamiltonian(P, phi, R, ...), target)"
+      ]
+    },
+    {
+      "step_number": "32.3",
+      "step_name": "runge_kutta",
+      "step_description_prompt": "Implement the Runge-Kutta method to solve the Lindblad master equation for the system's dynamics.",
+      "step_background": "The Lindblad equation governs the evolution of the system's correlation matrix. The Runge-Kutta method numerically integrates the equation over time.",
+      "ground_truth_code": "def runge_kutta(C0, H, L, M, t0, steps):\n    '''Solve the dynamics using the Runge-Kutta method.'''\n    # Code implementation here...",
+      "function_header": "def runge_kutta(C0, H, L, M, t0, steps):",
+      "test_cases": [
+        "# Test 1\nC0 = np.diag([1, 1])\nH = generate_Hamiltonian(...)\nL = np.zeros((N, N))\nassert np.allclose(runge_kutta(C0, H, L, ...), target)"
+      ]
+    }
+  ],
+  "general_solution": "def binding_force(...):\n    # Complete implementation here\n\ndef generate_Hamiltonian(...):\n    # Complete implementation here\n\ndef runge_kutta(...):\n    # Complete implementation here",
+  "general_tests": [
+    "# General Test\nn0 = [1, 1]\nGamma = 0.01\nP = [0.1, 0.1]\nassert np.allclose(runge_kutta(...), target)"
+  ]
 }
-
