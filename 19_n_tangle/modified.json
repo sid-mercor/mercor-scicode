@@ -47,9 +47,18 @@
             "step_number": "19.3",
             "step_description_prompt": "",
             "step_background": "",
-            "function_header": "ew",
-            "ground_truth_code": "dwe",
-            "return_line": "dwe",
+            "function_header": "3ed",
+            "ground_truth_code": "323",
+            "return_line": "323e",
+            "test_cases": []
+        },
+        {
+            "step_number": "19.4e",
+            "step_description_prompt": "",
+            "step_background": "",
+            "function_header": "e",
+            "ground_truth_code": "e",
+            "return_line": "e",
             "test_cases": []
         }
     ],
