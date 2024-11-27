@@ -1,36 +1,25 @@
 {
     "problem_name": "ising_model",
     "problem_id": "72",
-    "problem_description_main": "Implement a 2D Ising model with periodic boundary conditions using the Metropolis-Hastings algorithm. The lattice has dimensions (N, N) with spin interaction energy, J = 1, and no external magnetic field, B = 0. Write a Python script to compute the transition temperature by analyzing magnetization squared at different temperatures. hi",
+    "problem_description_main": "Implement a 2D Ising model with periodic boundary conditions using the Metropolis-Hastings algorithm. The lattice has dimensions (N, N) with spin interaction energy, J = 1, and no external magnetic field, B = 0. Write a Python script to compute the transition temperature by analyzing magnetization squared at different temperatures.",
     "problem_io": "'''\nInput: \nT (float): temperature\nN (int): system size along an axis\nnsweeps: number of iterations to go over all spins\n\nOutput:\nTransition temperature\n\n'''",
     "required_dependencies": "import numpy as np",
     "sub_steps": [
         {
             "step_number": "72.1",
-            "step_name": "neighbour_list",
-            "step_description_prompt": "Each spin site `(i, j)` has 4 nearest neighbors: `(i - 1, j), (i, j + 1), (i + 1, j), (i, j - 1)`. To ensure periodic boundary conditions, write a Python function that returns a list of 4 nearest neighbors of a spin at site `(i, j)` in a lattice of dimension `(N, N)`.",
+            "step_description_prompt": "Write a function to return the 4 nearest neighbors of a spin at site `(i, j)` in a 2D lattice with periodic boundary conditions with lattice of dimension `(N, N)`.",
             "function_header": "def neighbor_list(site, N):\n    '''Return all nearest neighbors of site (i, j).\n    Args:\n        site (Tuple[int, int]): site indices\n        N (int): number of sites along each dimension\n    Return:\n        list: a list of 2-tuples, [(i_left, j_left), (i_above, j_above), (i_right, j_right), (i_below, j_below)]\n    '''",
             "test_cases": [
-                "assert np.allclose(neighbor_list((0, 0), 10), target)",
-                "assert np.allclose(neighbor_list((9, 9), 10), target)",
-                "assert np.allclose(neighbor_list((0, 5), 10), target)",
-                "def test_neighbor():",
-                "    N = 10",
-                "    inputs = [(0, 0), (9, 9), (0, 5)]",
-                "    corrects = [",
-                "        [(9, 0), (0, 1), (1, 0), (0, 9)],",
-                "        [(8, 9), (9, 0), (0, 9), (9, 8)],",
-                "        [(9, 5), (0, 6), (1, 5), (0, 4)]",
-                "    ]",
-                "    for (i, j), correct in zip(inputs, corrects):",
-                "        if neighbor_list((i, j), N) != correct:",
-                "            return False",
-                "    return True",
-                "assert (test_neighbor()) == target"
+                "#Test 1:",
+                "assert neighbor_list((0, 0), N) == [(9, 0), (0, 1), (1, 0), (0, 9)]",
+                "#Test 2:",
+                "assert neighbor_list((9, 9), N) == [(8, 9), (9, 0), (0, 9), (9, 8)]",
+                "#Test 3:",
+                "assert neighbor_list((5, 0), N) == [(4, 0), (5, 1), (6, 0), (5, 9)]"
             ],
-            "return_line": "    return nn_wrap",
-            "step_background": "",
-            "ground_truth_code": ""
+            "return_line": "",
+            "step_background": "In a periodic 2D lattice, the neighbors of a spin at `(i, j)` wrap around when they exceed the boundaries. The 4 nearest neighbors of each spin site `(i, j)` are `(i - 1, j), (i, j + 1), (i + 1, j), (i, j - 1)`.",
+            "ground_truth_code": "def neighbor_list(site, N):\n    i, j = site\n    return [\n        ((i - 1) % N, j),  # left\n        (i, (j + 1) % N),  # above\n        ((i + 1) % N, j),  # right\n        (i, (j - 1) % N)   # below\n    ]"
         },
         {
             "step_number": "72.2",
