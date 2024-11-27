@@ -10,12 +10,12 @@
             "step_description_prompt": "Write a function to return the 4 nearest neighbors of a spin at site `(i, j)` in a 2D lattice with periodic boundary conditions with lattice of dimension `(N, N)`.",
             "function_header": "def neighbor_list(site, N):\n    '''Return all nearest neighbors of site (i, j).\n    Args:\n        site (Tuple[int, int]): site indices\n        N (int): number of sites along each dimension\n    Return:\n        list: a list of 2-tuples, [(i_left, j_left), (i_above, j_above), (i_right, j_right), (i_below, j_below)]\n    '''",
             "test_cases": [
-                "#Test 1:",
-                "assert neighbor_list((0, 0), N) == [(9, 0), (0, 1), (1, 0), (0, 9)]",
-                "#Test 2:",
-                "assert neighbor_list((9, 9), N) == [(8, 9), (9, 0), (0, 9), (9, 8)]",
-                "#Test 3:",
-                "assert neighbor_list((5, 0), N) == [(4, 0), (5, 1), (6, 0), (5, 9)]"
+                "# Test 1",
+                "assert neighbor_list((0, 0), 10) == [(9, 0), (0, 1), (1, 0), (0, 9)]",
+                "# Test 2",
+                "assert neighbor_list((9, 9), 10) == [(8, 9), (9, 0), (0, 9), (9, 8)]",
+                "# Test 3",
+                "assert neighbor_list((5, 0), 10) == [(4, 0), (5, 1), (6, 0), (5, 9)]"
             ],
             "return_line": "",
             "step_background": "In a periodic 2D lattice, the neighbors of a spin at `(i, j)` wrap around when they exceed the boundaries. The 4 nearest neighbors of each spin site `(i, j)` are `(i - 1, j), (i, j + 1), (i + 1, j), (i, j - 1)`.",
@@ -23,7 +23,7 @@
         },
         {
             "step_number": "72.2",
-            "step_description_prompt": "Write a Python function to calculate the total energy for the site `(i, j)` of the periodic Ising model with dimension `(N, N)` given a 2D `lattice` whose element is either 1 or -The `neighbor_list` function is given in .",
+            "step_description_prompt": "Write a function to calculate the total energy for the site `(i, j)` of the periodic Ising model with dimension `(N, N)` given a 2D `lattice` whose element is either 1 or -1. The `neighbor_list` function is given in Sub-problem 72.1.",
             "function_header": "def energy_site(i, j, lattice):\n    '''Calculate the energy of site (i, j)\n    Args:\n        i (int): site index along x\n        j (int): site index along y\n        lattice (np.array): shape (N, N), a 2D array +1 and -1\n    Return:\n        float: energy of site (i, j)\n    '''",
             "test_cases": [
                 "i = 1",
@@ -51,13 +51,13 @@
                 "    return energy_site(**params) == -1*(-1 + 3)",
                 "assert test_energy_site() == target"
             ],
-            "return_line": "    return energy",
+            "return_line": "",
             "step_background": "Background\nThe energy on site (i, j) is \n\n\\begin{align}\nE &= -s_a \\sum_{\\langle ab \\rangle} s_b.\n\\end{align}",
-            "ground_truth_code": ""
+            "ground_truth_code": "def energy_site(i, j, lattice):\n    N = lattice.shape[0]\n    spin = lattice[i, j]\n    neighbors = neighbor_list((i, j), N)\n    energy = -spin * sum(lattice[x, y] for x, y in neighbors)\n    return energy"
         },
         {
             "step_number": "72.3",
-            "step_description_prompt": "Write a Python function to calculate the total energy for all the site `(i, j)` of the periodic Ising model with dimension `(N, N)` given a 2D `lattice` whose element is either 1 or -",
+            "step_description_prompt": "Write a function to calculate the total energy for all the site `(i, j)` of the periodic Ising model with dimension `(N, N)` given a 2D `lattice` whose element is either 1 or -1def energy(lattice):\n    N = lattice.shape[0]\n    total_energy = 0\n    for i in range(N):\n        for j in range(N):\n            total_energy += energy_site(i, j, lattice)\n    return total_energy / 2  # Avoid double counting\n",
             "function_header": "def energy(lattice):\n    '''calculate the total energy for the site (i, j) of the periodic Ising model with dimension (N, N)\n    Args: lattice (np.array): shape (N, N), a 2D array +1 and -1\n    Return:\n        float: energy \n    '''",
             "test_cases": [
                 "lattice = np.array([[1, 1, 1, -1],[-1, 1, -1, -1],[-1, -1, 1, 1],[-1, 1, 1, 1]])",
@@ -78,13 +78,13 @@
                 "    return energy(**params) == 0",
                 "assert test_energy() == target"
             ],
-            "return_line": "    return e",
+            "return_line": "",
             "step_background": "Background\nThe Hamiltonian is\n\n\\begin{align}\nH &= -J \\sum_{\\langle ab \\rangle} s_a s_b - B \\sum_{a} s_a \\\\\n&= - \\sum_{\\langle ab \\rangle} s_a s_b,\n\\end{align}\n\nwhere $\\langle ij \\rangle$ iterates over unique pairs of nearest neighbors",
-            "ground_truth_code": ""
+            "ground_truth_code": "def energy(lattice):\r\n    N = lattice.shape[0]\r\n    total_energy = 0\r\n    for i in range(N):\r\n        for j in range(N):\r\n            total_energy += energy_site(i, j, lattice)\r\n    return total_energy / 2  # Avoid double counting\r\n"
         },
         {
             "step_number": "72.4",
-            "step_description_prompt": "Write a Python script to calculate the total magnetization of the periodic Ising model with dimension `(N, N)` given a 2D `lattice` whose element is either 1 or -",
+            "step_description_prompt": "Write a Python script to calculate the total magnetization of the periodic Ising model with dimension `(N, N)` given a 2D `lattice` whose element is either 1 or -1",
             "function_header": "def magnetization(spins):\n    '''total magnetization of the periodic Ising model with dimension (N, N)\n    Args: spins (np.array): shape (N, N), a 2D array +1 and -1\n    Return:\n        float: \n    '''",
             "test_cases": [
                 "spins = np.array([[1, 1, 1, -1],[-1, 1, -1, -1],[-1, -1, 1, 1],[-1, 1, 1, 1]])",
@@ -94,9 +94,9 @@
                 "spins = np.array([[1, 1, 1, -1],[-1, 1, -1, 1],[-1, -1, 1, 1],[-1, 1, 1, 1]])",
                 "assert np.allclose(magnetization(spins), target)"
             ],
-            "return_line": "    return mag",
+            "return_line": "",
             "step_background": "Background\nThe magnetization is defined as the sum of all spins\n\n\\begin{align}\nM &= \\sum_{i} s_i.\n\\end{align}",
-            "ground_truth_code": ""
+            "ground_truth_code": "def magnetization(lattice):\r\n    return np.sum(lattice)\r\n"
         },
         {
             "step_number": "72.5",
@@ -123,9 +123,9 @@
                 "    return get_flip_probability_magnetization(**params) == (0.01831563888873418, -2)",
                 "assert test_spin_flip() == target"
             ],
-            "return_line": "    return A, dM",
+            "return_line": "",
             "step_background": "Background\nAt temperature $T$, the partition function is\n\n\\begin{align}\nZ = \\sum_c \\exp[-\\beta H(c)],\n\\end{align}\n\nwhere $\\beta = 1/T$ and $H(c)$ is the energy for a spin configuration $c$.\n\nThe probability distribution is\n\n\\begin{align}\n\\Pi(c) &= \\frac{\\exp[-\\beta H(c)]}{Z}.\n\\end{align}\n\nWe move the configuration $c$ to $c^{\\prime}$ with some probability $T( c \\rightarrow c^{\\prime})$. In our case, we flip a random spin, so $T( c \\rightarrow c^{\\prime}) = T( c^{\\prime} \\rightarrow c) = 1/N$. Thus, we accept the move with the probability\n\n\\begin{align}\nA(c \\rightarrow c^{\\prime}) \n&= \\min \\left[1, \\frac{\\Pi(c^{\\prime})}{\\Pi(c)} \\frac{T(c^{\\prime} \\rightarrow c)}{T(c \\rightarrow c^{\\prime})} \\right] \\\\\n&= \\min [1, \\exp(-\\beta (H(c^{\\prime}) - H(c)))]\n\\end{align}",
-            "ground_truth_code": ""
+            "ground_truth_code": "def get_flip_probability_magnetization(lattice, i, j, beta):\r\n    current_energy = energy_site(i, j, lattice)\r\n    flipped_lattice = lattice.copy()\r\n    flipped_lattice[i, j] *= -1\r\n    new_energy = energy_site(i, j, flipped_lattice)\r\n    \r\n    dE = new_energy - current_energy\r\n    A = min(1, np.exp(-beta * dE))\r\n    dM = -2 * lattice[i, j]  # Magnetization change is \u00b12\r\n    return A, dM\r\n"
         },
         {
             "step_number": "72.6",
@@ -142,9 +142,9 @@
                 "spins = np.array([[ 1, -1,  1,  1],[-1, -1,  1,  -1],[-1, -1,  1,  1],[ 1, -1, -1, -1]])",
                 "assert np.allclose(flip(spins, 1), target)"
             ],
-            "return_line": "    return lattice",
+            "return_line": "",
             "step_background": "",
-            "ground_truth_code": ""
+            "ground_truth_code": "def flip(lattice, beta):\r\n    N = lattice.shape[0]\r\n    for i in range(N):\r\n        for j in range(N):\r\n            A, _ = get_flip_probability_magnetization(lattice, i, j, beta)\r\n            if np.random.rand() < A:\r\n                lattice[i, j] *= -1\r\n    return lattice\r\n"
         },
         {
             "step_number": "72.7",
@@ -158,9 +158,9 @@
                 "np.random.seed(0)",
                 "assert np.allclose(run(2.15, 3, 10), target)"
             ],
-            "return_line": "    return mag2",
+            "return_line": "",
             "step_background": "",
-            "ground_truth_code": ""
+            "ground_truth_code": "def run(T, N, nsweeps):\r\n    beta = 1.0 / T\r\n    lattice = np.random.choice([-1, 1], size=(N, N))\r\n    magnetization_sq = []\r\n    \r\n    for _ in range(nsweeps):\r\n        lattice = flip(lattice, beta)\r\n        mag = magnetization(lattice)\r\n        magnetization_sq.append(mag**2 / (N**4))\r\n    \r\n    return np.mean(magnetization_sq)\r\n"
         },
         {
             "step_number": "72.8",
@@ -174,9 +174,9 @@
                 "np.random.seed(0)",
                 "assert np.allclose(scan_T(Ts=[1.6, 2.10, 2.15, 2.20, 2.25, 2.30, 2.35, 2.40, 2.8], N=30, nsweeps=10), target)"
             ],
-            "return_line": "    return mag2_avg",
+            "return_line": "",
             "step_background": "",
-            "ground_truth_code": ""
+            "ground_truth_code": "def scan_T(Ts, N, nsweeps):\r\n    results = []\r\n    for T in Ts:\r\n        results.append(run(T, N, nsweeps))\r\n    return results\r\n"
         },
         {
             "step_number": "72.9",
@@ -201,9 +201,9 @@
                 "T_transition = calc_transition(Ts, mag2)",
                 "assert (np.abs(T_transition - 2.269) < 0.2) == target"
             ],
-            "return_line": "    return T_transition",
+            "return_line": " ",
             "step_background": "",
-            "ground_truth_code": ""
+            "ground_truth_code": "def calc_transition(T_list, mag2_list):\r\n    mag2_array = np.array(mag2_list)\r\n    T_array = np.array(T_list)\r\n    d_mag2_dT = np.gradient(mag2_array, T_array)\r\n    transition_idx = np.argmin(np.abs(d_mag2_dT))\r\n    return T_array[transition_idx]\r\n"
         }
     ],
     "general_tests": [
