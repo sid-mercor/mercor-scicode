@@ -48,9 +48,27 @@
     ]
 }
 
+# _comment
+{
+  "summary_of_changes": [
+    {
+      "change_number": 1,
+      "description": "Main problem statement in line 4 was not clear. It has been modified to make it more clear, high-level, and unambiguous."
+    },
+    {
+      "change_number": 2,
+      "description": "The statement of subproblem 32.1 and 32.2 have been modified for clarity."
+    },
+    {
+      "change_number": 3,
+      "description": "Background statement of subproblem 32.1 has also been slightly updated for clarity."
+    },
+    {
+      "change_number": 4,
+      "description": "Statement for subproblem 32.3 has been slightly modified."
+    }
+  ]
+}
 
 
-Summary of the changes made: 
-1. Main problem statement in line 4 was not clear. It has been modified to make it more clearer, high-level and unabmbiguous. 
-2. The statement of subproblem 32.1 and 32.2 have been modified for clarity. 
-3. Statement for subproblem 32.3 has been slightly modified. 
+
