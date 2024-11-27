@@ -1,7 +1,7 @@
 {
     "problem_name": "ising_model",
     "problem_id": "72",
-    "problem_description_main": "Write a Python script to find the transition temperature of a periodic 2D Ising model with J = 1 and B = 0 using the Metropolis-Hastings algorithm. The lattice should be of dimension (N, N).",
+    "problem_description_main": "Write a Python script to find the transition temperature of a periodic 2D Ising model with J = 1 and B = 0 using the Metropolis-Hastings algorithm. The lattice should be of dimension (N, N).\n\n\ninteraction energy, J = 1, and no external magnetic field, B = 0. Write a Python script",
     "problem_io": "'''\nInput: \nT (float): temperature\nN (int): system size along an axis\nnsweeps: number of iterations to go over all spins\n\nOutput:\nTransition temperature\n\n'''",
     "required_dependencies": "import numpy as np",
     "sub_steps": [
@@ -170,7 +170,7 @@
             ],
             "return_line": "    return mag2",
             "step_background": "",
-            "ground_truth_code": "trial"
+            "ground_truth_code": ""
         },
         {
             "step_number": "72.8",
