@@ -41,6 +41,6 @@
           "# Test 2: 4-qubit GHZ state |GHZ₄⟩ = (|0000⟩ + |1111⟩)/√2\npsi = np.zeros(16, dtype=complex)\npsi[0] = 1/np.sqrt(2)\npsi[15] = 1/np.sqrt(2)\ntarget = 1.0\nassert np.isclose(n_tangle(psi), target, rtol=1e-4, atol=1e-4)",
           "# Test 3: 4-qubit W state |W₄⟩ = (|0001⟩ + |0010⟩ + |0100⟩ + |1000⟩)/2\npsi = np.zeros(16, dtype=complex)\npsi[1] = 1/2\npsi[2] = 1/2\npsi[4] = 1/2\npsi[8] = 1/2\ntarget = 0.0\nassert np.isclose(n_tangle(psi), target, rtol=1e-4, atol=1e-4)",
           "# Test 4: Product state |01⟩ (no entanglement)\npsi = np.kron([0, 1], [0.8, 0.6])\ntarget = 0.0\nassert np.isclose(n_tangle(psi), target, rtol=1e-4, atol=1e-4)",
-          "# Test 5: Complex-valued product state (1/2)*|00⟩ + (1/2)*|01⟩ + (i/2)*|10⟩ + (i/2)*|11⟩\npsi = np.array([1/2, 1/2, 1j/2, 1j/2])\ntarget = 0.0\nassert np.isclose(n_tangle(psi), target, rtol=1e-4, atol=1e-4)"
+          "# Test 5: Product state with complex-valued amplitudes (1/2)*|00⟩ + (1/2)*|01⟩ + (i/2)*|10⟩ + (i/2)*|11⟩\npsi = np.array([1/2, 1/2, 1j/2, 1j/2])\ntarget = 0.0\nassert np.isclose(n_tangle(psi), target, rtol=1e-4, atol=1e-4)"
     ]
 }
