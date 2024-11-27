@@ -1,7 +1,7 @@
 {
     "problem_name": "ising_model",
     "problem_id": "72",
-    "problem_description_main": "Write a Python script to find the transition temperature of a periodic 2D Ising model with J = 1 and B = 0 using the Metropolis-Hastings algorithm. The lattice should be of dimension (N, N).\n\n\ninteraction energy, J = 1, and no external magnetic field, B = 0. Write a Python script",
+    "problem_description_main": "Implement a 2D Ising model with periodic boundary conditions using the Metropolis-Hastings algorithm. The lattice has dimensions (N, N) with spin interaction energy, J = 1, and no external magnetic field, B = 0. Write a Python script to compute the transition temperature by analyzing magnetization squared at different temperatures.",
     "problem_io": "'''\nInput: \nT (float): temperature\nN (int): system size along an axis\nnsweeps: number of iterations to go over all spins\n\nOutput:\nTransition temperature\n\n'''",
     "required_dependencies": "import numpy as np",
     "sub_steps": [
@@ -222,5 +222,5 @@
         "np.random.seed(0)\nTs = [1.6, 2.10, 2.15, 2.20, 2.25, 2.30, 2.35, 2.40, 2.8]\nmag2 = scan_T(Ts=Ts, N=20, nsweeps=100)\nassert np.allclose(calc_transition(Ts, mag2), target)",
         "np.random.seed(0)\nTs = [1.6, 2.10, 2.15, 2.20, 2.25, 2.30, 2.35, 2.40, 2.8]\nmag2 = scan_T(Ts=Ts, N=30, nsweeps=2000)\nT_transition = calc_transition(Ts, mag2)\nassert (np.abs(T_transition - 2.269) < 0.2) == target"
     ],
-    "problem_background_main": ""
+    "problem_background_main": "The 2D Ising model is defined by a lattice of spins (+1 or -1) with interaction energy represented by Hamiltonian, given by:\n\\\\begin{align}\nH = -J \\\\sum_{\\\\langle i,j \\\\rangle} s_i s_j,\n \\\\end{align}\nwhere $J$ is the coupling constant (here J = 1), $\\\\langle i,j \\\\rangle$ are nearest neighbors, and $s_i,s_j$ are spins at site i and j respectively. The transition temperature can be estimated by examining changes in the magnetization squared ($M^2$) as a function of temperature.\n\nThe Metropolis-Hastings algorithm is used to simulate the dynamics of the system:\n1. Propose flipping a spin.\n2. Calculate the change in energy $\\\\Delta E$ due to the flip.\n3. Accept the flip with probability $A = \\\\min(1, \\\\exp(-\\\\beta \\\\Delta E))$, where $\\\\beta = 1/T$.\n\nThe system is evolved for a specified number of sweeps, with measurements taken to calculate $M^2$."
 }
