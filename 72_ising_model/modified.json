@@ -7,6 +7,7 @@
     "sub_steps": [
         {
             "step_number": "72.1",
+            "step_name": "neighbour_list",
             "step_description_prompt": "Each spin site `(i, j)` has 4 nearest neighbors: `(i - 1, j), (i, j + 1), (i + 1, j), (i, j - 1)`. To ensure periodic boundary conditions, write a Python function that returns a list of 4 nearest neighbors of a spin at site `(i, j)` in a lattice of dimension `(N, N)`.",
             "function_header": "def neighbor_list(site, N):\n    '''Return all nearest neighbors of site (i, j).\n    Args:\n        site (Tuple[int, int]): site indices\n        N (int): number of sites along each dimension\n    Return:\n        list: a list of 2-tuples, [(i_left, j_left), (i_above, j_above), (i_right, j_right), (i_below, j_below)]\n    '''",
             "test_cases": [
