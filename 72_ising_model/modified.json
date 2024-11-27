@@ -1,7 +1,7 @@
 {
     "problem_name": "ising_model",
     "problem_id": "72",
-    "problem_description_main": "Implement a 2D Ising model with periodic boundary conditions using the Metropolis-Hastings algorithm. The lattice has dimensions (N, N) with spin interaction energy, J = 1, and no external magnetic field, B = 0. Write a Python script to compute the transition temperature by analyzing magnetization squared at different temperatures.",
+    "problem_description_main": "Implement a 2D Ising model with periodic boundary conditions using the Metropolis-Hastings algorithm. The lattice has dimensions (N, N) with spin interaction energy, J = 1, and no external magnetic field, B = 0. Write a Python script to compute the transition temperature by analyzing magnetization squared at different temperatures. hi",
     "problem_io": "'''\nInput: \nT (float): temperature\nN (int): system size along an axis\nnsweeps: number of iterations to go over all spins\n\nOutput:\nTransition temperature\n\n'''",
     "required_dependencies": "import numpy as np",
     "sub_steps": [
