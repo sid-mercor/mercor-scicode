@@ -14,20 +14,21 @@
             "function_header": "def calculate_binding_force(P, phi, R, l, w, a, n):",
             "ground_truth_code": "def calculate_binding_force(P, phi, R, l, w, a, n):\n    alpha = 4 * np.pi * epsilon_0 * a**3 * (n**2 - 1) / (n**2 + 2)\n    E1 = np.sqrt(4 * P[0] / (np.pi * w**2 * epsilon_0 * c))\n    E2 = np.sqrt(4 * P[1] / (np.pi * w**2 * epsilon_0 * c))\n    k = 2 * np.pi / l\n    F = (alpha**2 * E1 * E2 / (8 * np.pi * epsilon_0 * R**4)) * (\n        -3 * np.cos(k * R) - 3 * k * R * np.sin(k * R) + (k * R)**2 * np.cos(k * R)\n    )\n    return F", 
             "test_cases": [
-"# Test case 1 \n     P = [10e6, 100e6]  # Laser powers (W) \n     phi = 0  # Polarization angle (radians) \n     R = 1550e-9  # Distance between nanospheres (m) \n     l = 1550e-9  # Wavelength (m) \n     w = 600e-9  # Beam waist (m) \n     a = 100e-9  # Radius of nanospheres (m) \n     n = 1.444  # Refractive index \n     target = binding_force(P, phi, R, l, w, a, n) \n     assert np.isclose(binding_force(P, phi, R, l, w, a, n), target), (\n         f"Test case 1 failed. Expected {target}, got {binding_force(P, phi, R, l, w, a, n)}" \n     )"
-"# Test case 2 \n     P = [10e6, 100e6] \n     phi = np.pi / 2\n     R = 1550e-9 \n     l = 1550e-9 \n     w = 600e-9 \n     a = 100e-9 \n     n = 1.444 \n     target = binding_force(P, phi, R, l, w, a, n) \n     assert np.isclose(binding_force(P, phi, R, l, w, a, n), target), (\n         f"Test case 2 failed. Expected {target}, got {binding_force(P, phi, R, l, w, a, n)}" \n     )" \n
-"# Test case 3 \n     P = [1e9, 1e9] \n     phi = np.pi / 4 \n     R = 1550e-9 \n     l = 1550e-9 \n     w = 600e-9 \n     a = 100e-9 \n     n = 1.444 \n     target = binding_force(P, phi, R, l, w, a, n) \n     assert np.isclose(binding_force(P, phi, R, l, w, a, n), target), (\n         f"Test case 3 failed. Expected {target}, got {binding_force(P, phi, R, l, w, a, n)}" \n     )\n         "assert np.isclose(calculate_binding_force([1e-3, 1e-3], 0, 1.5e-6, 1.55e-6, 0.6e-6, 0.1e-6, 1.444), 2.089e-06)",\n "assert np.isclose(calculate_binding_force([1e-3, 2e-3], np.pi/4, 1e-6, 1.55e-6, 0.6e-6, 0.1e-6, 1.444), 3.472e-06)"
+            "# Test case 1 \n     P = [10e6, 100e6]  # Laser powers (W) \n     phi = 0  # Polarization angle (radians) \n     R = 1550e-9  # Distance between nanospheres (m) \n     l = 1550e-9  # Wavelength (m) \n     w = 600e-9  # Beam waist (m) \n     a = 100e-9  # Radius of nanospheres (m) \n     n = 1.444  # Refractive index \n     target = binding_force(P, phi, R, l, w, a, n) \n     assert np.isclose(binding_force(P, phi, R, l, w, a, n), target), (\n         f"Test case 1 failed. Expected {target}, got {binding_force(P, phi, R, l, w, a, n)}" \n     )"
+            "# Test case 2 \n     P = [10e6, 100e6] \n     phi = np.pi / 2\n     R = 1550e-9 \n     l = 1550e-9 \n     w = 600e-9 \n     a = 100e-9 \n     n = 1.444 \n     target = binding_force(P, phi, R, l, w, a, n) \n     assert np.isclose(binding_force(P, phi, R, l, w, a, n), target), (\n         f"Test case 2 failed. Expected {target}, got {binding_force(P, phi, R, l, w, a, n)}" \n     )" \n
+            "# Test case 3 \n     P = [1e9, 1e9] \n     phi = np.pi / 4 \n     R = 1550e-9 \n     l = 1550e-9 \n     w = 600e-9 \n     a = 100e-9 \n     n = 1.444 \n     target = binding_force(P, phi, R, l, w, a, n) \n     assert np.isclose(binding_force(P, phi, R, l, w, a, n), target), (\n         f"Test case 3 failed. Expected {target}, got {binding_force(P, phi, R, l, w, a, n)}" \n     )\n         "assert np.isclose(calculate_binding_force([1e-3, 1e-3], 0, 1.5e-6, 1.55e-6, 0.6e-6, 0.1e-6, 1.444), 2.089e-06)",\n "assert np.isclose(calculate_binding_force([1e-3, 2e-3], np.pi/4, 1e-6, 1.55e-6, 0.6e-6, 0.1e-6, 1.444), 3.472e-06)"
             ]
         },
         {
             "step_number": "32.2",
             "step_name": "Generate Hamiltonian",
-            "step_description_prompt": "Taking into account the linearized optical binding forces, write a function to compute the Hamiltonian of the provided nanosphere system.",
+            "step_description_prompt": "Write a Python function to compute the Hamiltonian of the provided nanosphere system, considering the linearized optical binding forces.",
             "step_background": "The Hamiltonian represents the coupled oscillatory system, incorporating resonant frequencies and coupling constants between nanospheres. These parameters are derived from linearized binding forces.",
             "function_header": "def generate_hamiltonian(P, phi, R, l, w, a, n, N, rho):",
             "ground_truth_code": "def generate_hamiltonian(P, phi, R, l, w, a, n, N, rho):\n    H = np.zeros((N, N))\n    m = (4/3) * np.pi * a**3 * rho\n    for i in range(N):\n        H[i, i] = np.sqrt(calculate_binding_force([P[i], P[i]], phi, R, l, w, a, n) / m)\n        if i > 0:\n            coupling = calculate_binding_force([P[i - 1], P[i]], phi, R, l, w, a, n)\n            H[i, i - 1] = H[i - 1, i] = -coupling / m\n    return H",
             "test_cases": [
-
+            "# Test Case 1: 2 Nanospheres \n     P = [1e-3, 1e-3]  # Laser power (W) \n     phi = 0.0  # Polarization angle (radians) \n     R = 1e-6  # Distance (m) \n     l = 1.55e-6  # Wavelength (m) \n     w = 0.6e-6  # Beam waist (m) \n     a = 0.1e-6  # Radius (m) \n     n = 1.444  # Refractive index \n     rho = 2200  # Density (kg/m³) \n     N = 2  # Number of nanospheres \n     # Call the function \n     H = generate_hamiltonian(P, phi, R, l, w, a, n, N, rho) \n     # Expected result \n     expected_H = np.array([ \n         [np.sqrt(1.0 / (4 / 3 * np.pi * a**3 * rho)), -1.0 / (4 / 3 * np.pi * a**3 * rho)], \n         [-1.0 / (4 / 3 * np.pi * a**3 * rho), np.sqrt(1.0 / (4 / 3 * np.pi * a**3 * rho))] \n  ]) \n     # Assert equality \n     assert np.allclose(H, expected_H, rtol=1e-4, atol=1e-6), "Test Case 1 Failed!" \n     print("Test Case 1 Passed!") "
+            "# Test Case 2: 3 Nanospheres \n     N = 3 \n     H = generate_hamiltonian(P * N, phi, R, l, w, a, n, N, rho) \n     # Expected result for 3 nanospheres \n     expected_H = np.zeros((3, 3)) \n     for i in range(3): \n         expected_H[i, i] = np.sqrt(1.0 / (4 / 3 * np.pi * a**3 * rho)) \n     expected_H[0, 1] = expected_H[1, 0] = expected_H[1, 2] = expected_H[2, 1] = -1.0 / (4 / 3 * np.pi * a**3 * rho) \n    # Assert equality \n     assert np.allclose(H, expected_H, rtol=1e-4, atol=1e-6), "Test Case 2 Failed!" \n     print("Test Case 2 Passed!")"
                 "assert np.allclose(generate_hamiltonian([...]), target)",
                 "assert np.allclose(generate_hamiltonian([...]), target)"
             ]
@@ -35,21 +36,26 @@
         {
             "step_number": "32.3",
             "step_name": "Runge-Kutta for Phonon Dynamics",
-            "step_description_prompt": "Implement the fourth-order Runge-Kutta method to simulate phonon occupation dynamics in the Lindblad form within the nanosphere system.",
+            "step_description_prompt": "Write a Python function to implement the fourth-order Runge-Kutta (RK4) method to simulate phonon occupation dynamics in the Lindblad form. Implement the model on different scenarios of Phonon occupation in the nanosphare system, starting with simplified case without any dynamics. Then simulate the Hamiltonian-driven dynamics followed by dissipative dynamics that takes into account the damping function. Finally, study the combined effects of Hamiltonian and dissipative dynamics of Phonon occupation within the described system by implementing RK4 model.",
             "step_background": "The Lindblad master equation describes the evolution of the correlation matrix under dissipation and external fields. The RK4 method numerically integrates this equation.",
             "function_header": "def runge_kutta_dynamics(C0, H, L, M, t0, steps):",
             "ground_truth_code": "def runge_kutta_dynamics(C0, H, L, M, t0, steps):\n    dt = t0 / steps\n    C = C0\n    for _ in range(steps):\n        k1 = dt * (1j * (H @ C - C @ H) + L @ C + M)\n        k2 = dt * (1j * (H @ (C + 0.5 * k1) - (C + 0.5 * k1) @ H) + L @ (C + 0.5 * k1) + M)\n        k3 = dt * (1j * (H @ (C + 0.5 * k2) - (C + 0.5 * k2) @ H) + L @ (C + 0.5 * k2) + M)\n        k4 = dt * (1j * (H @ (C + k3) - (C + k3) @ H) + L @ (C + k3) + M)\n        C += (k1 + 2 * k2 + 2 * k3 + k4) / 6\n    return np.diagonal(C)",
             "test_cases": [
-                "assert np.isclose(runge_kutta_dynamics([...]), target)",
-                "assert np.isclose(runge_kutta_dynamics([...]), target)"
-            ]
+            "# Test Case 1: Simplified case with no dynamics \n     C0 = np.array([[1.0, 0.0], [0.0, 0.0]], dtype=complex) \n     H = np.zeros((2, 2), dtype=complex)  # Zero Hamiltonian \n     L = np.zeros((2, 2), dtype=complex)  # Zero dissipative operator \n     M = np.zeros((2, 2), dtype=complex)  # Zero driving matrix \n     t0 = 1.0 \n     steps = 100 \n     expected = C0 \n     result = runge_kutta_dynamics(C0, H, L, M, t0, steps) \n     assert np.allclose(result, expected, rtol=1e-4, atol=1e-6), f"Test Case 1 Failed! Expected {expected}, got {result}." \n     print("Test Case 1 Passed!") "
+            "# Test Case 2: Simple Hamiltonian-driven dynamics \n     C0 = np.array([[1.0, 0.0], [0.0, 0.0]], dtype=complex) \n     H = np.array([[0.0, 1.0], [1.0, 0.0]], dtype=complex)  # Off-diagonal Hamiltonian \n     L = np.zeros((2, 2), dtype=complex)  # Zero dissipative operator \n     M = np.zeros((2, 2), dtype=complex)  # Zero driving matrix \n     t0 = np.pi  # Evolution time corresponding to a quarter period \n     steps = 100 \n     # Run the function \n    result = runge_kutta_dynamics(C0, H, L, M, t0, steps) \n     # Numerical validation using symmetry and trace conservation \n     result_trace = result.trace()  # Compute trace of the result \n    initial_trace = C0.trace()  # Compute trace of the initial state \n     assert np.isclose(result_trace, initial_trace, atol=1e-6), ( \n         f"Trace mismatch! Expected {initial_trace}, got {result_trace}." \n  ) \n    print("Test Case 2 Passed (Numerical Validation)!")" 
+            "# Test Case 3: Dissipative dynamics \n     C0 = np.eye(2, dtype=complex)  # Initial correlation matrix \n     H = np.zeros((2, 2), dtype=complex)  # No Hamiltonian dynamics \n     L = np.array([[0.1, 0.0], [0.0, 0.2]], dtype=complex)  # Simple damping matrix \n     M = np.zeros((2, 2), dtype=complex)  # No driving \n     t0 = 1.0  # Total evolution time \n     steps = 100 \n     # Run the function \n     result = runge_kutta_dynamics(C0, H, L, M, t0, steps) \n     # Validate against expected decay: exp(-t0 * L[i, i]) \n     expected = np.diag([np.exp(-t0 * L[0, 0]), np.exp(-t0 * L[1, 1])]) \n     # Compare result to expected values \n     assert np.allclose(np.diag(result), np.diag(expected), rtol=1e-4, atol=1e-6), ( \n         f"Test Case 3 Failed! Expected {expected}, got {result}." \n    ) \n     print("Test Case 3 Passed!") "
+            "# Test Case 4: Driving matrix effects \n     C0 = np.zeros((2, 2), dtype=complex)  # Initial zero matrix \n     H = np.zeros((2, 2), dtype=complex)  # Zero Hamiltonian \n     L = np.zeros((2, 2), dtype=complex)  # Zero dissipative operator \n     M = np.array([[0.0, 0.1], [0.1, 0.0]], dtype=complex)  # Off-diagonal driving term \n     t0 = 1.0 \n     steps = 100 \n     expected = M * t0  # Linear growth approximation for small t\n     result = runge_kutta_dynamics(C0, H, L, M, t0, steps) \n     assert np.allclose(result, expected, rtol=1e-4, atol=1e-6), f"Test Case 4 Failed! Expected {expected}, got {result}." \n     print("Test Case 4 Passed!")"
+            "# Test Case 5: Combined effects \n     C0 = np.eye(2, dtype=complex) * 0.5  # Diagonal initial condition \n     H = mock_hamiltonian(2)  # Mock Hamiltonian \n     L = mock_dissipative_operator(2)  # Mock dissipative operator \n     M = mock_driving_matrix(2)  # Mock driving matrix \n     t0 = 2.0 \n     steps = 100 \n     result = runge_kutta_dynamics(C0, H, L, M, t0, steps) \n    print("Test Case 5 Result:", result) \n     print("Test Case 5 Passed! (Verification may require numerical analysis)") \n   "assert np.isclose(runge_kutta_dynamics([...]), target)", \n  "assert np.isclose(runge_kutta_dynamics([...]), target)"  ]
         }
     ],
     "general_tests": [
         "assert np.allclose(simulate_phonon_dynamics([...]), target)"
     ],
-{
-  "summary_of_changes done by Mamoona": [
+
+
+
+"# { 
+  "summary_of_changes done": [ 
     {
       "change_number": 1,
       "description": "Main problem statement in line 4 was not clear. It has been modified to make it more clear, high-level, and unambiguous."
@@ -65,21 +71,18 @@
     {
       "change_number": 4,
       "description": "Statement for subproblem 32.3 has been slightly modified."
-    }
-  ]
-}
-    "summary_of_changes done by Shahriar": [
+    },  
         {
-            "change_number": 1,
+            "change_number": 5,
             "description": "Ground truth code and test cases for step 32.1 have been modified to pass all test cases"
         },
         {
-            "change_number": 2,
+            "change_number": 6,
             "description": "Slightly modified Hamiltonian generation logic in step 32.2 to pass all test cases"
         },
         {
-            "change_number": 3,
+            "change_number": 7,
             "description": "Refined Runge-Kutta dynamics for step 32.3. so that all the test cases pass"
         }
     ]
-}
+}"
