@@ -2,7 +2,7 @@
 {
     "problem_name": "Multiparticle_dynamics_in_the_optical_tweezer_array",
     "problem_id": "32",
-    "problem_description_main": "A system of $N$ identical nanospheres is trapped by an optical tweezer array that is arranged equidistantly along the $x$ axis. Each nanosphere is confined to oscillate near its equilibrium position because of the harmonic trapping forces from the linearly polarized optical tweezer array. The adjacent nanospheres interact via optical binding forces resulting from induced dipoles. Compute the dynamics of phonon occupation for small oscillations along the $x$-axis near the equilibrium positions of each sphere.",
+    "problem_description_main": "A system of $N$ identical nanospheres is trapped by an optical tweezer array that is arranged equidistantly along the $x$ axis. Each nanosphere is confined to oscillate near its equilibrium position because of the harmonic trapping forces from the linearly polarized optical tweezer array. The adjacent nanospheres interact via optical binding forces resulting from induced dipoles. Simulate the dynamics of phonon occupation using Python finctionalities for small oscillations along the $x$-axis near the equilibrium positions of each sphere.",
     "problem_background_main": "In an optical tweezer array, trapped nanospheres experience optical binding forces due to interactions between their induced dipoles and external fields. These forces, combined with damping and vibrational couplings, govern the dynamics of phonon occupation. This problem explores these dynamics by modeling the system as coupled harmonic oscillators.",
     "problem_io": "'''\nInput:\nN : int\n    Number of trapped nanospheres.\nt0 : float\n    Time point to compute phonon occupation.\nR : float\n    Distance between adjacent nanospheres.\nl : float\n    Wavelength of optical traps.\nphi : float\n    Polarization angle of the traps.\nGamma : float\n    Damping coefficient of nanospheres.\nP : list of floats\n    Power of optical traps for each nanosphere.\nn0 : list of floats\n    Initial phonon occupation numbers.\nw : float\n    Beam waist of optical traps.\na : float\n    Radius of nanospheres.\nn : float\n    Refractive index of nanospheres.\nrho : float\n    Density of nanospheres.\n\nOutput:\nnf : list of floats\n    Phonon occupation numbers at time t0.\n'''",
     "required_dependencies": "import numpy as np\nimport scipy\nfrom scipy.constants import epsilon_0, c",
@@ -47,18 +47,38 @@
     "general_tests": [
         "assert np.allclose(simulate_phonon_dynamics([...]), target)"
     ],
-    "summary_of_changes": [
+{
+  "summary_of_changes done by Mamoona": [
+    {
+      "change_number": 1,
+      "description": "Main problem statement in line 4 was not clear. It has been modified to make it more clear, high-level, and unambiguous."
+    },
+    {
+      "change_number": 2,
+      "description": "The statement of subproblem 32.1 and 32.2 have been modified for clarity."
+    },
+    {
+      "change_number": 3,
+      "description": "Background statement of subproblem 32.1 has also been slightly updated for clarity."
+    },
+    {
+      "change_number": 4,
+      "description": "Statement for subproblem 32.3 has been slightly modified."
+    }
+  ]
+}
+    "summary_of_changes done by Shahriar": [
         {
             "change_number": 1,
-            "description": "Updated ground truth code and test cases for step 32.1."
+            "description": "Ground truth code and test cases for step 32.1 have been modified to pass all test cases"
         },
         {
             "change_number": 2,
-            "description": "Updated Hamiltonian generation logic in step 32.2."
+            "description": "Slightly modified Hamiltonian generation logic in step 32.2 to pass all test cases"
         },
         {
             "change_number": 3,
-            "description": "Refined Runge-Kutta dynamics for step 32.3."
+            "description": "Refined Runge-Kutta dynamics for step 32.3. so that all the test cases pass"
         }
     ]
 }
