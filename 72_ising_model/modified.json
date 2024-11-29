@@ -12,16 +12,10 @@
             "function_header": "def neighbor_list(site: tuple, N: int) -> list:\n    '''Return all nearest neighbors of site (i, j) in a periodic lattice.\n    Args:\n        site: A tuple (i, j) representing the site indices.\n        N (int): The size of the lattice along one dimension.\n        Returns: a list of tuples, [(i_left, j_left), (i_above, j_above), (i_right, j_right), (i_below, j_below)]\n    '''",
             "test_cases": [
                 "N = 10\nresult = neighbor_list((0, 0), N)\nexpected =[(9, 0), (0, 1), (1, 0), (0, 9)]\nassert result == expected, f\"Expected {expected}, but got {result}\"",
-                "N = 10",
-                "result = neighbor_list((9,9), N)",
-                "expected =[(8, 9), (9, 0), (0, 9), (9, 8)]",
-                "assert result == expected, f\"Expected {expected}, but got {result}\"",
-                "N = 10",
-                "result = neighbor_list((5,0), N)",
-                "expected =[(4, 0), (5, 1), (6, 0), (5, 9)]",
-                "assert result == expected, f\"Expected {expected}, but got {result}\""
+                "N = 10\nresult = neighbor_list((9,9), N)\nexpected =[(8, 9), (9, 0), (0, 9), (9, 8)]\nassert result == expected, f\"Expected {expected}, but got {result}\"",
+                "N = 10\nresult = neighbor_list((5,0), N)\nexpected =[(4, 0), (5, 1), (6, 0), (5, 9)]\nassert result == expected, f\"Expected {expected}, but got {result}\""
             ],
-            "return_line": "",
+            "return_line": "return neighbors",
             "step_background": "In a periodic 2D lattice,  each spin has four nearest neighbors: left, above, right, and below. The 4 nearest neighbors of each spin site $(i, j)$ are $(i - 1, j), (i, j + 1), (i + 1, j), (i, j - 1)$. The neighbors of a spin at $(i, j)$ wrap around to the other side when they exceed the boundaries.",
             "ground_truth_code": "def neighbor_list(site: tuple, N: int) -> list:\n    '''Return all nearest neighbors of a site (i, j) in a periodic lattice.\n        Args:\n             site: A tuple (i, j) representing the site indices.\n             N (int): The size of the lattice along one dimension.\n             Returns: a list of tuples, [(i_left, j_left), (i_above, j_above), (i_right, j_right), (i_below, j_below)'''\n    i, j = site\n    neighbors = [\n        ((i - 1) % N, j),  # left\n        (i, (j + 1) % N),  # above\n        ((i + 1) % N, j),  # right\n        (i, (j - 1) % N)   # below\n    ]\n    return neighbors"
         },
@@ -31,11 +25,11 @@
             "step_description_prompt": "Write a function to calculate the energy contribution of a spin at site $(i, j)$ in the lattice.",
             "function_header": "def energy_site(i: int, j: int, lattice: np.ndarray) -> float:\n    '''Calculate the energy contribution of a spin at site (i, j)\n    Args:\n        i (int): Row index of the spin.\n        j (int): Column index of the spin.\n        lattice (np.array): A 2D array representing lattice of shape (N, N)\n        Returns: The energy (float value) contribution of site (i, j)'''",
             "test_cases": [
-                "#Test 1:\\nlattice = np.array([[ 1, -1,  1,  1], [-1, -1,  1,  1], [-1, -1,  1,  1], [ 1, -1, -1, -1]])\\ni, j = 1, 2\\nexpected = -1 * (lattice[0,2] + lattice[1,3] + lattice[2,2] + lattice[1,1])\\nresult = energy_site(i, j, lattice)\\nassert result == expected, f\"Expected {expected}, but got {result}\"",
-                "#Test 2:\\nlattice = np.array([[ 1, -1,  1,  1], [-1,  1,  1,  1], [-1, -1,  1,  1], [ 1, -1, -1, -1]])\\ni, j = 1, 2\\nexpected = -1 * (lattice[0,2] + lattice[1,3] + lattice[2,2] + lattice[1,1])\\nresult = energy_site(i, j, lattice)\\nassert result == expected, f\"Expected {expected}, but got {result}\"",
-                " #Test 3:\\nlattice = np.array([[ 1, -1,  1,  1], [-1, -1,  1, -1], [-1, -1,  1,  1], [ 1, -1, -1, -1]])\\ni, j = 1, 2\\nexpected = -1 * (lattice[0,2] + lattice[1,3] + lattice[2,2] + lattice[1,1])\\nresult = energy_site(i, j, lattice)\\nassert result == expected, f\"Expected {expected}, but got {result}\""
+                "lattice = np.array([[ 1, -1,  1,  1], [-1, -1,  1,  1], [-1, -1,  1,  1], [ 1, -1, -1, -1]])\\ni, j = 1, 2\\nexpected = -1 * (lattice[0,2] + lattice[1,3] + lattice[2,2] + lattice[1,1])\\nresult = energy_site(i, j, lattice)\\nassert result == expected, f\"Expected {expected}, but got {result}\"",
+                "lattice = np.array([[ 1, -1,  1,  1], [-1,  1,  1,  1], [-1, -1,  1,  1], [ 1, -1, -1, -1]])\\ni, j = 1, 2\\nexpected = -1 * (lattice[0,2] + lattice[1,3] + lattice[2,2] + lattice[1,1])\\nresult = energy_site(i, j, lattice)\\nassert result == expected, f\"Expected {expected}, but got {result}\"",
+                "lattice = np.array([[ 1, -1,  1,  1], [-1, -1,  1, -1], [-1, -1,  1,  1], [ 1, -1, -1, -1]])\\ni, j = 1, 2\\nexpected = -1 * (lattice[0,2] + lattice[1,3] + lattice[2,2] + lattice[1,1])\\nresult = energy_site(i, j, lattice)\\nassert result == expected, f\"Expected {expected}, but got {result}\""
             ],
-            "return_line": "",
+            "return_line": "return energy",
             "step_background": "The energy contribution of a spin on site $(i, j)$ is given by:\n\n $E_{ij} = -s_{ij} \\sum_{\\text{neighbors}} s_{kl}$\n\nwhere $\\ s_{ij} $ is the spin at site $(i, j)$, and the sum runs over its nearest neighbors.",
             "ground_truth_code": "def energy_site(i: int, j: int, lattice: np.ndarray) -> float:\n    '''Calculate the energy contribution of a spin at site (i, j)\n    Args:\n        i (int): Row index of the spin.\n        j (int): Column index of the spin.\n        lattice (np.array): A 2D array representing lattice of shape (N, N)\n        Returns: The energy (float value) contribution of site (i, j)'''\n    N = lattice.shape[0]\n    spin = lattice[i, j]\n    neighbors = neighbor_list((i, j), N)\n    energy = -spin * sum(lattice[ni, nj] for ni, nj in neighbors)\n    return energy"
         },
