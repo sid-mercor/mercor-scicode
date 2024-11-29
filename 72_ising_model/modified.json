@@ -25,9 +25,9 @@
             "step_description_prompt": "Write a function to calculate the energy contribution of a spin at site $(i, j)$ in the lattice.",
             "function_header": "def energy_site(i: int, j: int, lattice: np.ndarray) -> float:\n    '''Calculate the energy contribution of a spin at site (i, j)\n    Args:\n        i (int): Row index of the spin.\n        j (int): Column index of the spin.\n        lattice (np.array): A 2D array representing lattice of shape (N, N)\n        Returns: The energy (float value) contribution of site (i, j)'''",
             "test_cases": [
-                "lattice = np.array([[ 1, -1,  1,  1], [-1, -1,  1,  1], [-1, -1,  1,  1], [ 1, -1, -1, -1]])\\ni, j = 1, 2\\nexpected = -1 * (lattice[0,2] + lattice[1,3] + lattice[2,2] + lattice[1,1])\\nresult = energy_site(i, j, lattice)\\nassert result == expected, f\"Expected {expected}, but got {result}\"",
-                "lattice = np.array([[ 1, -1,  1,  1], [-1,  1,  1,  1], [-1, -1,  1,  1], [ 1, -1, -1, -1]])\\ni, j = 1, 2\\nexpected = -1 * (lattice[0,2] + lattice[1,3] + lattice[2,2] + lattice[1,1])\\nresult = energy_site(i, j, lattice)\\nassert result == expected, f\"Expected {expected}, but got {result}\"",
-                "lattice = np.array([[ 1, -1,  1,  1], [-1, -1,  1, -1], [-1, -1,  1,  1], [ 1, -1, -1, -1]])\\ni, j = 1, 2\\nexpected = -1 * (lattice[0,2] + lattice[1,3] + lattice[2,2] + lattice[1,1])\\nresult = energy_site(i, j, lattice)\\nassert result == expected, f\"Expected {expected}, but got {result}\""
+                "lattice = np.array([[ 1, -1,  1,  1], [-1, -1,  1,  1], [-1, -1,  1,  1], [ 1, -1, -1, -1]])\ni, j = 1, 2\nexpected = -1 * (lattice[0,2] + lattice[1,3] + lattice[2,2] + lattice[1,1])\nresult = energy_site(i, j, lattice)\nassert result == expected, f\"Expected {expected}, but got {result}\"",
+                "lattice = np.array([[ 1, -1,  1,  1], [-1,  1,  1,  1], [-1, -1,  1,  1], [ 1, -1, -1, -1]])\ni, j = 1, 2\\nexpected = -1 * (lattice[0,2] + lattice[1,3] + lattice[2,2] + lattice[1,1])\nresult = energy_site(i, j, lattice)\nassert result == expected, f\"Expected {expected}, but got {result}\"",
+                "lattice = np.array([[ 1, -1,  1,  1], [-1, -1,  1, -1], [-1, -1,  1,  1], [ 1, -1, -1, -1]])\ni, j = 1, 2\\nexpected = -1 * (lattice[0,2] + lattice[1,3] + lattice[2,2] + lattice[1,1])\nresult = energy_site(i, j, lattice)\nassert result == expected, f\"Expected {expected}, but got {result}\""
             ],
             "return_line": "return energy",
             "step_background": "The energy contribution of a spin on site $(i, j)$ is given by:\n\n $E_{ij} = -s_{ij} \\sum_{\\text{neighbors}} s_{kl}$\n\nwhere $\\ s_{ij} $ is the spin at site $(i, j)$, and the sum runs over its nearest neighbors.",
@@ -39,11 +39,11 @@
             "step_description_prompt": "Write a function to calculate the total energy (also called Hamiltonian) of the 2D lattice with dimension $(N, N)$.",
             "function_header": "def total_energy(lattice: np.ndarray) -> float:    \n    '''Calculate the total energy of the lattice.\n    Args:\n    lattice: A 2D NumPy array representing the spin lattice.\n    Returns: The total energy (float value) of the lattice.'''",
             "test_cases": [
-                "#Test 1:\\nlattice = np.array([[1, 1, 1, -1], [-1, 1, -1, -1], [-1, -1, 1, 1], [-1, 1, 1, 1]])\\nresult_E = total_energy(lattice)\\nexpected_E = 0  # Example value (needs calculation)\\nassert result_E == expected_E, f\"Expected {expected_E}, but got {result_E}\"",
-                "#Test 2:\\nlattice = np.array([[1, 1], [1, 1]])\\nresult_E = total_energy(lattice)\\nexpected_E = -4 * 2  # Each bond counts once\\nassert result_E == expected_E, f\"Expected {expected_E}, but got {result_E}\"",
-                "#Test 3:\\nlattice = np.array([[-1, -1], [-1, -1]])\\nresult_E = total_energy(lattice)\\nexpected_E = -4 * 2\\nassert result_E == expected_E, f\"Expected {expected_E}, but got {result_E}\""
+                "lattice = np.array([[1, 1, 1, -1], [-1, 1, -1, -1], [-1, -1, 1, 1], [-1, 1, 1, 1]])\nresult_E = total_energy(lattice)\nexpected_E = 0  # Example value (needs calculation)\nassert result_E == expected_E, f\"Expected {expected_E}, but got {result_E}\"",
+                "lattice = np.array([[1, 1], [1, 1]])\nresult_E = total_energy(lattice)\nexpected_E = -4 * 2  # Each bond counts once\nassert result_E == expected_E, f\"Expected {expected_E}, but got {result_E}\"",
+                "lattice = np.array([[-1, -1], [-1, -1]])\nresult_E = total_energy(lattice)\nexpected_E = -4 * 2\nassert result_E == expected_E, f\"Expected {expected_E}, but got {result_E}\""
             ],
-            "return_line": "",
+            "return_line": "return total_energy",
             "step_background": "The total energy, which is also represented as Hamiltonian is calculated by summing the energy contributions of all unique pairs of nearest neighbors to avoid double counting. This can be achieved by summing over each site and considering only the right and above neighbors.\n\nThe Hamiltonian is given by:\n\n$H = -J \\sum_{\\langle i, j \\rangle} s_i s_j - B \\sum_{i} s_i$\n$\\&= - \\sum_{\\langle ab \\rangle} s_a s_b$\n\nwhere $\\langle i, j \\rangle$ iterates over unique pairs of nearest neighbors.",
             "ground_truth_code": "def total_energy(lattice: np.ndarray) -> float:    \n    '''Calculate the total energy of the lattice.\n    Args:\n    lattice: A 2D NumPy array representing the spin lattice.\n    Returns: The total energy (float value) of the lattice.'''\n    N = lattice.shape[0]\n    total_energy = 0\n    for i in range(N):\n        for j in range(N):\n            spin = lattice[i, j]            \n            neighbors = [((i + 1) % N, j), (i, (j + 1) % N)]  # Avoid double counting\n            total_energy += -spin * sum(lattice[ni, nj] for ni, nj in neighbors)\n    return total_energy"
         },
@@ -53,11 +53,11 @@
             "step_description_prompt": "Write a function to calculate the total magnetization of the 2D lattice.",
             "function_header": "def magnetization(lattice):\n    ''' Calculate the total magnetization of the 2D lattice.\n    Args:\n    lattice: A 2D NumPy array representing the spin lattice.\n    Returns: The total magnetization of the lattice.    '''",
             "test_cases": [
-                "#Test 1:\\nlattice = np.array([[1, 1, 1, -1], [-1, 1, -1, -1], [-1, -1, 1, 1], [-1, 1, 1, 1]])\\nresult_mag = magnetization(lattice)\\nexpected_mag = 2\\nassert result_mag == expected_mag, f\"Expected {expected_mag}, but got {result_mag}\"",
-                "#Test 2:\\nlattice = np.array([[1, 1, 1, -1], [-1, -1, -1, -1], [-1, -1, 1, 1], [-1, 1, 1, 1]])\\nresult_mag = magnetization(lattice)\\nexpected_mag = 0\\nassert result_mag == expected_mag, f\"Expected {expected_mag}, but got {result_mag}\"",
-                "#Test 3:\\nlattice = np.array([[1, 1, 1, -1], [-1, 1, -1, 1], [-1, -1, 1, 1], [-1, 1, 1, 1]])\\nresult_mag = magnetization(lattice)\\nexpected_mag = 4\\nassert result_mag == expected_mag, f\"Expected {expected_mag}, but got {result_mag}\""
+                "lattice = np.array([[1, 1, 1, -1], [-1, 1, -1, -1], [-1, -1, 1, 1], [-1, 1, 1, 1]])\nresult_mag = magnetization(lattice)\nexpected_mag = 2\nassert result_mag == expected_mag, f\"Expected {expected_mag}, but got {result_mag}\"",
+                "lattice = np.array([[1, 1, 1, -1], [-1, -1, -1, -1], [-1, -1, 1, 1], [-1, 1, 1, 1]])\nresult_mag = magnetization(lattice)\nexpected_mag = 0\nassert result_mag == expected_mag, f\"Expected {expected_mag}, but got {result_mag}\"",
+                "lattice = np.array([[1, 1, 1, -1], [-1, 1, -1, 1], [-1, -1, 1, 1], [-1, 1, 1, 1]])\nresult_mag = magnetization(lattice)\nexpected_mag = 4\nassert result_mag == expected_mag, f\"Expected {expected_mag}, but got {result_mag}\""
             ],
-            "return_line": "",
+            "return_line": "return magnetization",
             "step_background": "The magnetization is defined as the sum of all spins in the lattice:\n$M = \\sum_{i} s_i$",
             "ground_truth_code": "def magnetization(lattice: np.ndarray) -> int:  \r\n    ''' Calculate the total magnetization of the 2D lattice.\r\n    Args:\r\n    lattice: A 2D NumPy array representing the spin lattice.\r\n    Returns: The total magnetization of the lattice.    '''\r\n    mag = np.sum(lattice)  \r\n    return mag"
         },
@@ -67,8 +67,8 @@
             "step_description_prompt": "Write a function to calculate the acceptance probability and the change in magnetization due to a spin flip at site $(i, j)$ given the inverse temperature $\\beta$.",
             "function_header": "def get_flip_probability_magnetization(lattice: np.ndarray, i: int, j: int, beta: float) -> tuple:\n    '''Calculate the spin flip acceptance probability and change in magnetization.\n    Args:\n    lattice: A 2D NumPy array representing the spin lattice.\n    i: Row index of the spin to flip.\n    j: Column index of the spin to flip.\n    beta (float): Inverse temperature (1/T).\n    Returns: A tuple containing:\n             - A: The acceptance probability of the spin flip.\n             - dM: The change in magnetization due to the flip.'''",
             "test_cases": [
-                "#Test 1:\\nlattice = np.array([[ 1, -1,  1,  1], [-1, -1,  1,  1], [-1, -1,  1,  1], [ 1, -1, -1, -1]])\\ni, j = 1, 2\\nbeta = 1.0\\nA, dM = get_flip_probability_magnetization(lattice, i, j, beta)\\nexpected_A = min(1, np.exp(-beta * (-2 * energy_site(i, j, lattice))))\\nexpected_dM = -2 * lattice[i, j]\\nassert np.isclose(A, expected_A, atol=1e-4), f\"Expected {expected_A}, but got {A}\"\\nassert dM == expected_dM, f\"Expected {expected_dM}, but got {dM}\"",
-                "#Test 2:\\nlattice = np.array([[ 1, -1], [-1,  1]])\\ni, j = 0, 0\\nbeta = 0.5\\nA, dM = get_flip_probability_magnetization(lattice, i, j, beta)\\nexpected_A = min(1, np.exp(-beta * (-2 * energy_site(i, j, lattice))))\\nexpected_dM = -2 * lattice[i, j]\\nassert np.isclose(A, expected_A, atol=1e-4), f\"Expected {expected_A}, but got {A}\"\\nassert dM == expected_dM, f\"Expected {expected_dM}, but got {dM}\""
+                "lattice = np.array([[ 1, -1,  1,  1], [-1, -1,  1,  1], [-1, -1,  1,  1], [ 1, -1, -1, -1]])\ni, j = 1, 2\nbeta = 1.0\\nA, dM = get_flip_probability_magnetization(lattice, i, j, beta)\nexpected_A = min(1, np.exp(-beta * (-2 * energy_site(i, j, lattice))))\nexpected_dM = -2 * lattice[i, j]\nassert np.isclose(A, expected_A, atol=1e-4), f\"Expected {expected_A}, but got {A}\"\\nassert dM == expected_dM, f\"Expected {expected_dM}, but got {dM}\"",
+                "lattice = np.array([[ 1, -1], [-1,  1]])\ni, j = 0, 0\nbeta = 0.5\nA, dM = get_flip_probability_magnetization(lattice, i, j, beta)\nexpected_A = min(1, np.exp(-beta * (-2 * energy_site(i, j, lattice))))\nexpected_dM = -2 * lattice[i, j]\nassert np.isclose(A, expected_A, atol=1e-4), f\"Expected {expected_A}, but got {A}\"\\nassert dM == expected_dM, f\"Expected {expected_dM}, but got {dM}\""
             ],
             "return_line": "",
             "step_background": "The acceptance probability $A$ for flipping a spin is given by:\n\n$A = \\min\\left(1, e^{-\\beta \\Delta E}\\right)$\n\nwhere $\\Delta E = E_{\\text{new}} - E_{\\text{old}} = -2 \\times E_{ij}$, since flipping the spin changes its sign.\n\nThe change in magnetization $\\Delta M$ is simply $ -2 s_{ij}$.\n\nAt temperature $T$, the partition function is given by:\n\n$Z = \\sum_c e^{-\\beta H(c)}$\n\nwhere $\\beta = 1/T$ and $H(c)$ is the energy for a spin configuration $c$.\n\nThe probability distribution is given by:\n\n$\\Pi(c) &= \\frac{e^{-\\beta H(c)}{Z}$\n\nWe move the configuration $c$ to $c^{\\prime}$ with some probability $T( c \\rightarrow c^{\\prime})$. In our case, we flip a random spin, so $T( c \\rightarrow c^{\\prime}) = T( c^{\\prime} \\rightarrow c) = 1/N$. Thus, we accept the move with the probability\n\n$A(c \\rightarrow c^{\\prime})$\n$&= \\min \\left[1, \\frac{\\Pi(c^{\\prime})}{\\Pi(c)}$ $\\frac{T(c^{\\prime} \\rightarrow c)}{T(c \\rightarrow c^{\\prime})} \\right$\n$\\&= \\min [1, e^{-\\beta (H(c^{\\prime}) - H(c))}]$",
@@ -84,7 +84,7 @@
                 "# Test 2:\\nnp.random.seed(1)\\nlattice = np.array([[1, 1], [1, 1]])\\nlattice_new = metropolis_sweep(lattice.copy(), beta=1.0)\\nassert np.allclose(lattice_new, [[ 1,  1],[-1, -1]]), f\"Expected {[[ 1,  1], [-1, -1]]}, but got {lattice_new}\"",
                 "# Test 3:\\nnp.random.seed(2)\\nlattice = np.array([[-1, -1], [-1, -1]])\\nlattice_new = metropolis_sweep(lattice.copy(), beta=1.0)\\nassert np.allclose(lattice_new, [[-1, -1],[-1,-1]]), f\"Expected {[[-1, -1], [-1,-1]]}, but got {lattice_new}\""
             ],
-            "return_line": "",
+            "return_line": "return lattice",
             "step_background": "Perform one sweep of the Metropolis-Hastings algorithm over the lattice. In one sweep, each spin in the lattice is visited, and a spin flip is attempted according to the Metropolis-Hastings acceptance probability.",
             "ground_truth_code": "def metropolis_sweep(lattice: np.ndarray, beta: float) -> np.ndarray:\n    '''Perform one sweep of the Metropolis-Hastings algorithm over the lattice. Goes through each spin in the 2D lattice and flip it.\n    Args:\n    lattice: A 2D NumPy array representing the spin lattice.\n    beta (float): Inverse temperature (1/T).\n    Returns: The updated lattice (final spin configuration) after the sweep.'''\n    N = lattice.shape[0]\n    for i in range(N):\n        for j in range(N):\n            A, _ = get_flip_probability_magnetization(lattice, i, j, beta)\n            if np.random.rand() < A:\n                lattice[i, j] *= -1\n    return lattice"
         },
@@ -94,11 +94,11 @@
             "step_description_prompt": "Write a function  to run the 2D Ising model simulation for a given temperature.",
             "function_header": "def run_simulation(T: float, N: int, nsweeps: int) -> np.ndarray:\n    '''Run the Ising model simulation at temperature T.\n    Args:\n    T (float): Temperature of the simulation.\n    N: Size of the lattice (N x N).\n    nsweeps: Number of sweeps to perform.\n    Returns mag2: magnetization^2, An array of magnetization squared values collected during the simulation.'''",
             "test_cases": [
-                "#Test 1:\\nnp.random.seed(0)\\nmag2 = run_simulation(T=1.6, N=3, nsweeps=10)\\nassert len(mag2) == 10, f\"Expected length of mag2 is {10}, but got {len(mag2)}\"",
-                "#Test 2:\\nnp.random.seed(0)\\nmag2 = run_simulation(T=2.1, N=3, nsweeps=10)\\nassert len(mag2) == 10, f\"Expected length of mag2 is {10}, but got {len(mag2)}\"",
-                "#Test 3:\\nnp.random.seed(0)\\nmag2 = run_simulation(T=2.15, N=3, nsweeps=10)\\nassert len(mag2) == 10, f\"Expected length of mag2 is {10}, but got {len(mag2)}\""
+                "np.random.seed(0)\nmag2 = run_simulation(T=1.6, N=3, nsweeps=10)\nassert len(mag2) == 10, f\"Expected length of mag2 is {10}, but got {len(mag2)}\"",
+                "np.random.seed(0)\nmag2 = run_simulation(T=2.1, N=3, nsweeps=10)\nassert len(mag2) == 10, f\"Expected length of mag2 is {10}, but got {len(mag2)}\"",
+                "np.random.seed(0)\nmag2 = run_simulation(T=2.15, N=3, nsweeps=10)\nassert len(mag2) == 10, f\"Expected length of mag2 is {10}, but got {len(mag2)}\""
             ],
-            "return_line": "",
+            "return_line": "return mag2",
             "step_background": "The simulation involves performing multiple sweeps over the lattice of size `N` and collecting magnetization squared values to analyze the system's behavior at different temperatures.",
             "ground_truth_code": "def run_simulation(T: float, N: int, nsweeps: int) -> np.ndarray:\n    '''Run the Ising model simulation at temperature T.\n    Args:\n    T (float): Temperature of the simulation.\n    N: Size of the lattice (N x N).\n    nsweeps: Number of sweeps to perform.\n    Returns mag2: magnetization^2, An array of magnetization squared values collected during the simulation.'''\n    beta = 1.0 / T\n    lattice = np.random.choice([-1, 1], size=(N, N))\n    mag2 = []\n    for _ in range(nsweeps):\n        lattice = metropolis_sweep(lattice, beta)\n        mag = magnetization(lattice)\n        mag2.append(mag ** 2 / (N**4))\n    return np.array(mag2)"
         },
@@ -108,11 +108,11 @@
             "step_description_prompt": "Write a function to run simulations over a range of temperatures.",
             "function_header": "def scan_temperatures(Ts: list, N: int, nsweeps: int) -> list:\n    '''Run simulations over a range of temperatures.\n    Args:\n    Ts: List of temperatures to simulate.\n    N: Size of the lattice (N x N).\n    nsweeps: Number of sweeps to perform at each temperature.\n    Returns: A list of average magnetization squared values for each temperature.'''",
             "test_cases": [
-                "#Test 1:\\nnp.random.seed(0)\\nTs = [1.6, 2.10, 2.15, 2.20, 2.25, 2.30, 2.35, 2.40, 2.8]\\nmag2_avg = scan_temperatures(Ts, N=10, nsweeps=5)\\nassert len(mag2_avg) == len(Ts), f\"Expected length of mag2_avg is {len(Ts)}, but got {len(mag2_avg)}\"",
-                "#Test 2:\\nnp.random.seed(0)\\nTs = [2.0, 2.2, 2.4]\\nmag2_avg = scan_temperatures(Ts, N=20, nsweeps=10)\\nassert len(mag2_avg) == len(Ts), f\"Expected length of mag2_avg is {len(Ts)}, but got {len(mag2_avg)}\"",
-                "#Test 3:\\nnp.random.seed(0)\\nTs = [2.1, 2.3, 2.5]\\nmag2_avg = scan_temperatures(Ts, N=30, nsweeps=10)\\nassert len(mag2_avg) == len(Ts),  f\"Expected length of mag2_avg is {len(Ts)}, but got {len(mag2_avg)}\""
+                "np.random.seed(0)\nTs = [1.6, 2.10, 2.15, 2.20, 2.25, 2.30, 2.35, 2.40, 2.8]\nmag2_avg = scan_temperatures(Ts, N=10, nsweeps=5)\nassert len(mag2_avg) == len(Ts), f\"Expected length of mag2_avg is {len(Ts)}, but got {len(mag2_avg)}\"",
+                "np.random.seed(0)\nTs = [2.0, 2.2, 2.4]\nmag2_avg = scan_temperatures(Ts, N=20, nsweeps=10)\nassert len(mag2_avg) == len(Ts), f\"Expected length of mag2_avg is {len(Ts)}, but got {len(mag2_avg)}\"",
+                "np.random.seed(0)\nTs = [2.1, 2.3, 2.5]\nmag2_avg = scan_temperatures(Ts, N=30, nsweeps=10)\nassert len(mag2_avg) == len(Ts),  f\"Expected length of mag2_avg is {len(Ts)}, but got {len(mag2_avg)}\""
             ],
-            "return_line": "",
+            "return_line": "return mag2_avg",
             "step_background": "By simulating the system of size $N$ at various temperatures, we could observe how the magnetization changes and estimate the critical temperature.",
             "ground_truth_code": "def scan_temperatures(Ts: list, N: int, nsweeps: int) -> list:\n    '''Run simulations over a range of temperatures.\n    Args:\n    Ts: List of temperatures to simulate.\n    N: Size of the lattice (N x N).\n    nsweeps: Number of sweeps to perform at each temperature.\n    Returns: A list of average magnetization squared values for each temperature.'''\n    mag2_avg = []\n    for T in Ts:\n        mag2 = run_simulation(T, N, nsweeps)\n        mag2_avg.append(np.mean(mag2))\n    return mag2_avg"
         },
@@ -122,11 +122,11 @@
             "step_description_prompt": "Write a function to calculate the critical temperature from magnetization data.",
             "function_header": "def calc_transition_temperature(T_list: list, mag2_list: list) -> float:\n    '''Calculate the critical temperature from magnetization data.\n    Args:\n    T_list: List of temperatures.\n    mag2_list: List of average magnetization squared values corresponding to T_list.\n    Returns: The estimated critical temperature.'''",
             "test_cases": [
-                "#Test 1:\\nnp.random.seed(0)\\nTs =  [1.6, 2.10, 2.15, 2.20, 2.25, 2.30, 2.35, 2.40, 2.8]\\nmag2 = scan_T(Ts=Ts, N=5, nsweeps=100)\\nT_transition = calc_transition_temperature(Ts, mag2)\\nassert np.allclose(T_transition, 2.3, atol=0.1),  f\"Expected T_transition is {2.3}, but got {T_transition}\"",
-                "#Test 2:\\nnp.random.seed(0)\\nTs = [1.0, 2.0, 3.0]\\nmag2 = scan_T(Ts=Ts, N=10, nsweeps=100)\\nT_transition = calc_transition_temperature(Ts, mag2)\\nassert np.allclose(T_transition, 3.0, atol=0.1), f\"Expected T_transition is {3.0}, but got {T_transition}\"",
-                "# Test 3:\\nnp.random.seed(0)\\nTs = [2.0, 2.2, 2.269, 2.4, 2.6]\\nmag2 =  scan_T(Ts=Ts, N=30, nsweeps=200)\\nT_transition = calc_transition_temperature(Ts, mag2)\\nassert np.allclose(T_transition, 2.269, atol=0.1),  f\"Expected T_transition is {2.269}, but got {T_transition}\""
+                "np.random.seed(0)\nTs =  [1.6, 2.10, 2.15, 2.20, 2.25, 2.30, 2.35, 2.40, 2.8]\nmag2 = scan_T(Ts=Ts, N=5, nsweeps=100)\nT_transition = calc_transition_temperature(Ts, mag2)\nassert np.allclose(T_transition, 2.3, atol=0.1),  f\"Expected T_transition is {2.3}, but got {T_transition}\"",
+                "np.random.seed(0)\nTs = [1.0, 2.0, 3.0]\nmag2 = scan_T(Ts=Ts, N=10, nsweeps=100)\nT_transition = calc_transition_temperature(Ts, mag2)\nassert np.allclose(T_transition, 3.0, atol=0.1), f\"Expected T_transition is {3.0}, but got {T_transition}\"",
+                "np.random.seed(0)\nTs = [2.0, 2.2, 2.269, 2.4, 2.6]\nmag2 =  scan_T(Ts=Ts, N=30, nsweeps=200)\nT_transition = calc_transition_temperature(Ts, mag2)\nassert np.allclose(T_transition, 2.269, atol=0.1),  f\"Expected T_transition is {2.269}, but got {T_transition}\""
             ],
-            "return_line": " ",
+            "return_line": "return T_transition",
             "step_background": "The critical temperature is defined as the transition temperature in the simulation by analyzing the changes in magnetization squared across different temperatures. It calculates the derivative of magnetization squared with respect to temperature and finds the temperature at which this derivative is minimized (i.e., the magnetization changes most rapidly), indicating a phase transition.",
             "ground_truth_code": "def calc_transition_temperature(T_list: list, mag2_list: list) -> float:\n    '''Calculate the critical temperature from magnetization data.\n    Args:\n    T_list: List of temperatures.\n    mag2_list: List of average magnetization squared values corresponding to T_list.\n    Returns: The estimated critical temperature.'''\n    dmag2 = np.gradient(mag2_list, T_list)\n    T_transition = T_list[np.argmin(dmag2)]\n    return T_transition"
         }
