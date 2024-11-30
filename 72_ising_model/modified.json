@@ -31,7 +31,7 @@
             ],
             "return_line": "return energy",
             "step_background": "The energy contribution of a spin on site $(i, j)$ is given by:\n\n $E_{ij} = -J \\sum_{\\langle i, j \\rangle} s_i s_j$\n\nwhere $s_k$ is the spin at site $(k)$, and the sum runs over its nearest neighbors ${\\langle i, j \\rangle}$.",
-            "ground_truth_code": "def energy_site(i: int, j: int, lattice: np.ndarray) -> float:\n    '''Calculate the energy contribution of a spin at site (i, j)\n    Args:\n        i (int): Row index of the spin.\n        j (int): Column index of the spin.\n        lattice (np.array): A 2D array representing lattice of shape (N, N).\n        neighbors (list): A list of neighbor indices at site (i, j).\n        Returns: The energy (float value) contribution of site (i, j)'''\n    spin = lattice[i, j]\n    energy = -spin * sum(lattice[ni, nj] for ni, nj in neighbors)\n    return energy"
+            "ground_truth_code": "def energy_site(i: int, j: int, lattice: np.ndarray, neighbors: list) -> float:\n    '''Calculate the energy contribution of a spin at site (i, j)\n    Args:\n        i (int): Row index of the spin.\n        j (int): Column index of the spin.\n        lattice (np.array): A 2D array representing lattice of shape (N, N).\n        neighbors (list): A list of neighbor indices at site (i, j).\n        Returns: The energy (float value) contribution of site (i, j)'''\n    spin = lattice[i, j]\n    energy = -spin * sum(lattice[ni, nj] for ni, nj in neighbors)\n    return energy"
         },
         {
             "step_number": "72.3",
