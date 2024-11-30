@@ -53,21 +53,9 @@
             "step_description_prompt": "Write a function to calculate the total magnetization of the 2D lattice.",
             "function_header": "def magnetization(lattice):\n    ''' Calculate the total magnetization of the 2D lattice.\n    Args:\n    lattice: A 2D NumPy array representing the spin lattice.\n    Returns: The total magnetization of the lattice.    '''",
             "test_cases": [
-                "# Test 1:",
-                "lattice = np.array([[1, 1, 1, -1], [-1, 1, -1, -1], [-1, -1, 1, 1], [-1, 1, 1, 1]])",
-                "result_mag = magnetization(lattice)",
-                "expected_mag = 2",
-                "assert result_mag == expected_mag, f\"Expected {expected_mag}, but got {result_mag}\"",
-                "# Test 2:",
-                "lattice = np.array([[1, 1, 1, -1], [-1, -1, -1, -1], [-1, -1, 1, 1], [-1, 1, 1, 1]])",
-                "result_mag = magnetization(lattice)",
-                "expected_mag = 0",
-                "assert result_mag == expected_mag, f\"Expected {expected_mag}, but got {result_mag}\"",
-                "# Test 3:",
-                "lattice = np.array([[1, 1, 1, -1], [-1, 1, -1, 1], [-1, -1, 1, 1], [-1, 1, 1, 1]])",
-                "result_mag = magnetization(lattice)",
-                "expected_mag = 4",
-                "assert result_mag == expected_mag, f\"Expected {expected_mag}, but got {result_mag}\""
+                "# Test 1:\nlattice = np.array([[1, 1, 1, -1], [-1, 1, -1, -1], [-1, -1, 1, 1], [-1, 1, 1, 1]])\nresult_mag = magnetization(lattice)\nexpected_mag = 2\nassert result_mag == expected_mag, f\"Expected {expected_mag}, but got {result_mag}\"",
+                "# Test 2:\nlattice = np.array([[1, 1, 1, -1], [-1, -1, -1, -1], [-1, -1, 1, 1], [-1, 1, 1, 1]])\nresult_mag = magnetization(lattice)\nexpected_mag = 0\nassert result_mag == expected_mag, f\"Expected {expected_mag}, but got {result_mag}\"",
+                "# Test 3:\nlattice = np.array([[1, 1, 1, -1], [-1, 1, -1, 1], [-1, -1, 1, 1], [-1, 1, 1, 1]])\nresult_mag = magnetization(lattice)\nexpected_mag = 4\nassert result_mag == expected_mag, f\"Expected {expected_mag}, but got {result_mag}\""
             ],
             "return_line": "return magnetization",
             "step_background": "The magnetization is defined as the sum of all spins in the lattice:\n$M = \\sum_{i} s_i$",
@@ -96,7 +84,7 @@
                 "assert np.isclose(A, expected_A, atol=1e-4), f\"Expected {expected_A}, but got {A}\"\\nassert dM == expected_dM, f\"Expected {expected_dM}, but got {dM}\""
             ],
             "return_line": "",
-            "step_background": "The acceptance probability $A$ for flipping a spin is given by:\n\n$A = \\min\\left(1, e^{-\\beta \\Delta E}\\right)$\n\nwhere $\\Delta E = E_{\\text{new}} - E_{\\text{old}} = -2 \\times E_{ij}$, since flipping the spin changes its sign.\n\nThe change in magnetization $\\Delta M$ is simply $ -2 s_{ij}$.\n\nAt temperature $T$, the partition function is given by:\n\n$Z = \\sum_c e^{-\\beta H(c)}$\n\nwhere $\\beta = 1/T$ and $H(c)$ is the energy for a spin configuration $c$.\n\nThe probability distribution is given by:\n\n$P = e^{-\\beta H(c)}/Z$\n\nWe move the configuration $c$ to $c^{\\prime}$ with some probability $T( c \\rightarrow c^{\\prime})$. In our case, we flip a random spin, so $T( c \\rightarrow c^{\\prime}) = T( c^{\\prime} \\rightarrow c) = 1/N$. Thus, we accept the move with the probability\n\n$A(c \\rightarrow c^{\\prime})$\n$&= \\min \\left[1, \\frac{\\Pi(c^{\\prime})}{\\Pi(c)}$ $\\frac{T(c^{\\prime} \\rightarrow c)}{T(c \\rightarrow c^{\\prime})} \\right$\n$\\&= \\min [1, e^{-\\beta (H(c^{\\prime}) - H(c))}]$",
+            "step_background": "The acceptance probability $A$ for flipping a spin is given by:\n\n$A = \\min\\left(1, e^{-\\beta \\Delta E}\\right)$\n\nwhere\n\n $\\Delta E = E_{\\text{new}} - E_{\\text{old}} = -2 \\times E_{ij}$, since flipping the spin changes its sign.\n\nThe change in magnetization $\\Delta M$ is simply $ -2 s_{ij}$.\n\nAt temperature $T$, the partition function $Z$ is given by:\n\n$Z = \\sum_c e^{-\\beta H(c)}$\n\nwhere $\\beta = 1/T$ and $H(c)$ is the energy for a spin configuration $c$.\n\nThe probability distribution is given by:\n\n$P = e^{-\\beta H(c)}/Z$\n\nWe move the configuration $c$ to $c^{\\prime}$ with some probability $T( c \\rightarrow c^{\\prime})$. In this case, we flip a random spin, so:\n\n $T( c \\rightarrow c^{\\prime}) = T( c^{\\prime} \\rightarrow c) = 1/N$\n\n Thus, we accept the move with the probability:\n\n$A(c \\rightarrow c^{\\prime}) = \\min \\left[ 1, \\frac{\\Pi(c^{\\prime})}{\\Pi(c)} \\frac{T(c^{\\prime} \\rightarrow c)}{T(c \\rightarrow c^{\\prime})} \\right]$\n\nwhich simplifies to:\n\n$A(c \\rightarrow c^{\\prime}) = \\min[1, e^{-\\beta (H(c^{\\prime}) - H(c))}]$",
             "ground_truth_code": "def get_flip_probability_magnetization(lattice: np.ndarray, i: int, j: int, beta: float) -> tuple:\n    '''Calculate the spin flip acceptance probability and change in magnetization.\n    Args:\n    lattice: A 2D NumPy array representing the spin lattice.\n    i: Row index of the spin to flip.\n    j: Column index of the spin to flip.\n    beta (float): Inverse temperature (1/T).\n    Returns: A tuple containing:\n             - A: The acceptance probability of the spin flip.\n             - dM: The change in magnetization due to the flip.'''\n    spin = lattice[i, j]\n    current_energy = energy_site(i, j, lattice)\n    flipped_lattice = lattice.copy()\n    flipped_lattice[i, j] *= -1\n    new_energy = energy_site(i, j, flipped_lattice)\n    delta_E = new_energy - current_energy\n    A = min(1, np.exp(-beta * delta_E))\n    dM = -2 * spin\n    return A, dM"
         },
         {
