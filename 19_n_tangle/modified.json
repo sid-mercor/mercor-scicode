@@ -14,18 +14,8 @@
             "ground_truth_code": "def sigma_y_tensor_power(n) -> np.ndarray:\n    '''\n    Compute the tensor product of n Pauli Y matrices.\n\n    Input:\n    n: Number of matrices.\n\n    Output:\n    A numpy array representing the tensor product of the input arrays.\n    '''\n    if n % 2 != 0:\n\traise ValueError(\"n must be an even number.\")\n    sigma_y = np.array([[0,-1j],[1j,0]])\n    product = sigma_y\n    for i in range(n-1):\n        product = np.kron(product, sigma_y)\n    return product",
             "function_header": "def sigma_y_tensor_power(n) -> np.ndarray:\n    '''\n    Compute the tensor product of n Pauli Y matrices.\n\n    Input:\n    n: Number of matrices.\n\n    Output:\n    A numpy array representing the tensor product of the input arrays.\n    '''",
             "test_cases": [
-                "# Test 1: Tensor product of 2 Pauli Y matrices",
-                "    n=2",
-                "    sigma_y = np.array([[0,-1j],[1j,0]])",
-                "    target = np.kron(sigma_y, sigma_y)",
-                "    assert np.allclose(sigma_y_tensor_power(n), target, rtol=1e-4, atol=1e-4)",
-                "# Test 2: Tensor product of 4 Pauli Y matrices",
-                "    n=4",
-                "    sigma_y = np.array([[0,-1j],[1j,0]])",
-                "    target = sigma_y",
-                "    for i in range(n-1):",
-                "\ttarget = np.kron(target, sigma_y)",
-                "    assert np.allclose(sigma_y_tensor_power(4), target, rtol=1e-4, atol=1e-4)"
+                "# Test 1: Tensor product of 2 Pauli Y matrices\nn=2\nsigma_y = np.array([[0,-1j],[1j,0]])\ntarget = np.kron(sigma_y, sigma_y)\nassert np.allclose(sigma_y_tensor_power(n), target, rtol=1e-4, atol=1e-4)",
+                "# Test 2: Tensor product of 4 Pauli Y matrices\nn=4\nsigma_y = np.array([[0,-1j],[1j,0]])\ntarget = sigma_y\nfor i in range(n-1):\n\ttarget = np.kron(target, sigma_y)\nassert np.allclose(sigma_y_tensor_power(4), target, rtol=1e-4, atol=1e-4)"
             ],
             "return_line": ""
         },
