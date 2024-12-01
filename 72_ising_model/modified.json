@@ -101,7 +101,9 @@
             ],
             "return_line": "return mag2",
             "step_background": "The simulation involves performing multiple sweeps over the lattice of size `N` and collecting magnetization squared values to analyze the system's behavior at different temperatures.",
-            "ground_truth_code": "def run_simulation(T: float, N: int, nsweeps: int) -> np.ndarray:\n    '''Run the Ising model simulation at temperature T.\n    Args:\n    T (float): Temperature of the simulation.\n    N: Size of the lattice (N x N).\n    nsweeps: Number of sweeps to perform.\n    Returns mag2: magnetization^2, An array of magnetization squared values collected during the simulation.'''\n    beta = 1.0 / T\n    lattice = np.random.choice([-1, 1], size=(N, N))\n    mag2 = []\n    for _ in range(nsweeps):\n        lattice = metropolis_sweep(lattice, beta)\n        mag = magnetization(lattice)\n        mag2.append(mag ** 2 / (N**4))\n    return np.array(mag2)"
+            "ground_truth_code": "def run_simulation(T: float, N: int, nsweeps: int) -> np.ndarray:\n    '''Run the Ising model simulation at temperature T.\n    Args:\n    T (float): Temperature of the simulation.\n    N: Size of the lattice (N x N).\n    nsweeps: Number of sweeps to perform.\n    Returns mag2: magnetization^2, An array of magnetization squared values collected during the simulation.'''\n    beta = 1.0 / T\n    lattice = np.random.choice([-1, 1], size=(N, N))\n    mag2 = []\n    for _ in range(nsweeps):\n        for i in range(N):\n            for j in range(N):\n                spin = lattice[i, j]\n                neighbors = [
+                    lattice[(i-1) % N, j],\n                    lattice[(i+1) % N, j],\n                    lattice[i, (j-1) % N],\n                    lattice[i, (j+1) % N]\n                ]\n                delta_E = -2 * spin * sum(neighbors)\n                A = min(1, np.exp(-beta * delta_E))\n                if np.random.rand() < A:\n                    lattice[i, j] *= -1\n
+        mag = np.sum(lattice)\n        mag2.append(mag ** 2 / (N**4))\n    return np.array(mag2)"
         },
         {
             "step_number": "72.8",
