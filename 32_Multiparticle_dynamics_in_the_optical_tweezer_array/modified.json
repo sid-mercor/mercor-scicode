@@ -14,34 +14,12 @@
             "function_header": "def calculate_binding_force(P, phi, R, l, w, a, n):",
             "ground_truth_code": "    def calculate_binding_force(P, phi, R, l, w, a, n):\n    '''\n    Function to calculate the optical binding force between two trapped nanospheres.\n\n    Input\n    -----\n    P : list of length 2\n        Power of the two optical traps.\n    phi : float\n        Polarization direction of the optical traps.\n    R : float\n        Distance between the trapped nanospheres.\n    l : float\n        Wavelength of the optical traps.\n    w : float\n        Beam waist of the optical traps.\n    a : float\n        Radius of the trapped microspheres.\n    n : float\n        Refractive index of the trapped microspheres.\n\n    Output\n    ------\n    F : float\n        The optical binding force between two trapped nanospheres.\n    '''\n\n    # Constants\n    c = 3e8  # Speed of light (m/s)\n    eps_0 = 8.854e-12  # Vacuum permittivity (F/m)\n    k = 2 * np.pi / l  # Wave number\n\n    # Scalar polarizability\n    alpha = (4 * np.pi * eps_0 * a**3 * (n**2 - 1)) / (n**2 + 2)\n\n    # Electric fields of the two optical traps\n    E1 = np.sqrt(4 * P[0] / (np.pi * w**2 * eps_0 * c))\n    E2 = np.sqrt(4 * P[1] / (np.pi * w**2 * eps_0 * c))\n\n    # Fx calculation components\n    cos_phi2 = np.cos(phi)**2\n    sin_phi2 = np.sin(phi)**2\n\n    Fxx = (\n        2 * alpha**2 * E1 * E2 * cos_phi2 / (8 * np.pi * eps_0 * R**4)\n        * (-3 * np.cos(k * R) - 3 * k * R * np.sin(k * R) + (k * R)**2 * np.cos(k * R))\n    )\n    Fxy = (\n        alpha**2 * E1 * E2 * sin_phi2 / (8 * np.pi * eps_0 * R**4)\n        * (3 * np.cos(k * R) + 3 * k * R * np.sin(k * R) - 2 * (k * R)**2 * np.cos(k * R) - (k * R)**3 * np.sin(k * R))\n    )\n\n    # Total force\n    F = Fxx + Fxy  # solution updated\n   \n        print(f\"Test case {i+1} passed: Calculated Force = {calculated_force}, Target = {target_force}\")",
             "test_cases": [
-                "# Test case 1",
-                "\"P\" = [10000000, 100000000],   # Laser powers (W) ",
-                "\"phi\" = 0  # Polarization angle (radians) ",
-                "\"R\" = 1550e-9,   # Distance between nanospheres (m) ",
-                "\"l\" = 1550e-9  # Wavelength (m) ",
-                "\"w\" = 600e-9  # Beam waist (m) ",
-                "\"a\" = 100e-9,  # Radius of nanospheres (m) ",
-                " \"n\" = 1.444,   # Refractive index ",
-                " assert np.isclose(binding_force(P, phi, R, l, w, a, n), target, rtol=1e-6, atol=1e-9) }' ",
-                " ",
-                "# Test case 2 ",
-                "     \"P\" = [10e6, 100e6] ",
-                "     \"phi\" = np.pi / 2  ",
-                "     \"R\" = 1550e-9 ",
-                "     \"l\" = 1550e-9 ",
-                "     \"w\" = 600e-9 ",
-                "     \"a\" = 100e-9 ",
-                "     \"n\" = 1.444 ",
-                "   assert np.isclose(binding_force(P, phi, R, l, w, a, n), target, rtol=1e-6, atol=1e-9)}' ",
+                "# Test case 1"
+                {""P" = [10000000, 100000000], '''Laser powers (W)'''  "phi" = 0  '''Polarization angle (radians)''' ,"R" = 1550e-9,  '''Distance between nanospheres (m) ''', "l" = 1550e-9  '''Wavelength (m) ''', "w" = 600e-9  ''' Beam waist (m)''', "a" = 100e-9,  ''' Radius of nanospheres (m)''', "n" = 1.444,   ''' Refractive index ''',  assert np.isclose(binding_force(P, phi, R, l, w, a, n), target, (rtol=1e-6, atol=1e-9) }"
+                "# Test case 2 "
+                "{"P" = [10e6, 100e6] , "phi" = np.pi / 2, "R" = 1550e-9, "l" = 1550e-9, "w" = 600e-9,"a" = 100e-9 ",  "n" = 1.444,  assert np.isclose(binding_force(P, phi, R, l, w, a, n), target, (rtol=1e-6, atol=1e-9)}",
                 "# Test case 3 ",
-                "     \"P\" = [1e9, 1e9] ",
-                "    \"phi\" = np.pi / 4 ",
-                "     \"R\" = 1550e-9 ",
-                "     \"l\" = 1550e-9 ",
-                "     \"w\" = 600e-9 ",
-                "     \"a\" = 100e-9 ",
-                "     \"n\" = 1.444 ",
-                "      assert np.isclose(binding_force(P, phi, R, l, w, a, n), target, rtol=1e-6, atol=1e-9)}'"
+                "{"P" = [1e9, 1e9] , "phi" = np.pi / 4 , "R" = 1550e-9 ,"l" = 1550e-9 , "w" = 600e-9 , "a" = 100e-9 ,  "n" = 1.444 ,  assert np.isclose(binding_force(P, phi, R, l, w, a, n), target, (rtol=1e-6, atol=1e-9)}"
             ],
             "return_line": "  return F    \n  # Results\n  # Loaded Test Outputs: [2.090553478330249e-06, -2.17651746535146e-06, -1.3592099786808985e-06]\n# Test case 1 passed: Calculated Force = 2.0891072194969183e-06, Target = 2.090553478330249e-06\n# Test case 2 passed: Calculated Force = -2.1750117360588147e-06, Target = -2.17651746535146e-0\n#Test case 3 passed: Calculated Force = -1.3582696681562503e-06, Target = -1.3592099786808985e-06"
         },
