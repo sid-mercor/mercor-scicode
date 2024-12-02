@@ -3,7 +3,7 @@
     "problem_name": "n_tangle",
     "problem_description_main": "Write a function that returns the tensor product of n Pauli Y matrices. Using this function, compute the n-tangle of an n-qubit pure state, $|\\psi\\rangle$, for even $n$, represented as a complex vector of length $2^n$. The n-tangle, $\\tau_n$, is a measure of multi-qubit entanglement.",
     "problem_background_main": "The n-tangle of an n-qubit pure state $\\psi\\rangle$ is defined for even $n$ as:\n\n$\\tau_n = |\\langle \\psi | \\sigma_y^{\\otimes n} | \\psi^* \\rangle|^2$\n\nwhere $\\sigma_y$ is the Pauli Y matrix:\n\n$\\sigma_y = \\begin{pmatrix} 0 & -i \\\\ i & 0 \\end{pmatrix}$\n\nand $\\sigma_y^{\\otimes n}$ denotes the tensor product of $\\sigma_y$ with itself $n$ times. The state $|\\psi^*\\rangle$ is the complex conjugate of $|\\psi\\rangle$. The n-tangle is a scalar value between 0 and 1, where 0 indicates no entanglement and 1 indicates maximal entanglement.",
-    "problem_io": "'''\nInput:\n    psi: A 1D numpy array of complex numbers representing the state vector.\n    The length of the array should be 2^n, where n is an even integer.\n        product (optional): A precomputed tensor product of n Pauli Y matrices.\n\nOutput:\n    A float representing the n-tangle of the state.\n'''",
+    "problem_io": "'''\nInput:\npsi: A 1D numpy array of complex numbers representing the state vector.\nThe length of the array should be 2^n, where n is an even integer.\nproduct (optional): A precomputed tensor product of n Pauli Y matrices.\n\nOutput:\nA float representing the n-tangle of the state.\n'''",
     "required_dependencies": "import numpy as np",
     "sub_steps": [
         {
