@@ -3,7 +3,7 @@
     "problem_name": "n_tangle",
     "problem_description_main": "Write a function that returns the tensor product of $n$ Pauli Y matrices. Using this function, compute the $n$-tangle of an n-qubit pure state, $|\\psi\\rangle$, for even $n$, represented as a complex vector of length $2^n$. The $n$-tangle, $\\tau_n$, is a measure of multi-qubit entanglement.",
     "problem_background_main": "The $n$-tangle of an $n$-qubit pure state $|\\psi\\rangle$ is defined for even $n$ as:\n\n$\\tau_n = |\\langle \\psi^* | \\sigma_y^{\\otimes n} | \\psi \\rangle|^2$\n\nwhere $\\sigma_y$ is the Pauli Y matrix and $\\sigma_y^{\\otimes n}$ denotes the tensor product of $\\sigma_y$ with itself $n$ times.",
-    "problem_io": "'''\nArgs:\n    psi (np.ndarray): A 1D array of complex numbers representing the state vector.\n    product (np.ndarray, optional): The tensor product of n Pauli Y matrices.\n\nReturns float:\n    The n-tangle of the state.\n\nRaises:\n    ValueError: Raises an exception.\n'''",
+    "problem_io": "'''\nArgs:\n    psi (np.ndarray): A 1D array of complex numbers representing the state vector.\n    product (np.ndarray, optional): The tensor product of n Pauli Y matrices.\n\nReturns\n    float:\n    The n-tangle of the state.\n\nRaises:\n    ValueError: Raises an exception.\n'''",
     "required_dependencies": "import numpy as np",
     "sub_steps": [
         {
