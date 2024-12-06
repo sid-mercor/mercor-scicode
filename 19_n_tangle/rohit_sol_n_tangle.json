@@ -1,0 +1,136 @@
+{
+  "problem_id": "19",
+  "problem_name": "n_tangle",
+  "problem_description_main": "Write a function that returns the tensor product of n Pauli Y matrices. Using this function, compute the n-tangle of an n-qubit pure state |ψ⟩ for even n, where |ψ⟩ is a complex vector of length 2^n. The n-tangle is a measure of multi-qubit entanglement.",
+  "problem_background_main": "The n-tangle of an n-qubit pure state |ψ⟩ (for even n) is defined as:\n\nτ_n = |⟨ψ^*| σ_y^{⊗n} |ψ⟩|².",
+  "required_dependencies": "import numpy as np",
+  "problem_io": "def n_tangle(psi: np.ndarray, product: np.ndarray = None) -> float:\n    \"\"\"\n    Compute the n-tangle of an n-qubit pure state for even n.\n\n    Args:\n        psi (np.ndarray): A 1D complex numpy array representing the state vector |ψ⟩.\n                         Length = 2^n, where n is even.\n        product (np.ndarray, optional): Precomputed tensor product σ_y^{⊗n}. If None, computed internally.\n\n    Returns:\n        float: The n-tangle of the state.\n\n    Raises:\n        ValueError: If n is not even.\n    \"\"\"",
+  "general_solution": "def sigma_y_tensor_power(n: int) -> np.ndarray:\n    \"\"\"\n    Compute (σ_y)^{⊗n}.\n\n    Args:\n        n (int): Number of times to tensor the Pauli Y matrix.\n\n    Returns:\n        np.ndarray: The n-fold tensor product of σ_y.\n    \"\"\"\n    sigma_y = np.array([[0, -1j],[1j, 0]])\n    if n == 1:\n        return sigma_y\n    product = sigma_y\n    for _ in range(n-1):\n        product = np.kron(product, sigma_y)\n    return product\n\n\ndef n_tangle(psi: np.ndarray, product: np.ndarray = None) -> float:\n    \"\"\"\n    Compute the n-tangle of an n-qubit pure state for even n.\n\n    Args:\n        psi (np.ndarray): 1D complex numpy array, length 2^n, n even.\n        product (np.ndarray, optional): Precomputed σ_y^{⊗n}. If None, it is computed.\n\n    Returns:\n        float: The n-tangle.\n\n    Raises:\n        ValueError: If n is not even.\n    \"\"\"\n    n = int(np.log2(len(psi)))\n    if n % 2 != 0:\n        raise ValueError(\"n must be even.\")\n\n    if product is None:\n        product = sigma_y_tensor_power(n)\n\n    psi_star = product @ psi\n    val = np.inner(np.conj(psi), psi_star)\n    tangle = np.abs(val)**2\n    return tangle",
+  "general_tests": [
+    "# Test 1: 2-qubit maximally entangled state (|00> + |11>)/√2",
+    "psi = np.array([1, 0, 0, 1])/np.sqrt(2)",
+    "expected = 1.0",
+    "assert np.isclose(n_tangle(psi), expected, rtol=1e-4, atol=1e-4)",
+
+    "# Test 2: 2-qubit product state |01>",
+    "psi = np.array([0,1,0,0])",
+    "expected = 0.0",
+    "assert np.isclose(n_tangle(psi), expected, rtol=1e-4, atol=1e-4)",
+
+    "# Test 3: Intermediate entanglement example",
+    "a = 0.5",
+    "raw_psi = np.array([1, a, a, 1], dtype=complex)",
+    "raw_psi = raw_psi / np.linalg.norm(raw_psi)",
+    "val = n_tangle(raw_psi)",
+    "assert 0.0 < val < 1.0",
+
+    "# Test 4: Complex amplitudes (|00> + i|11>)/√2",
+    "psi = np.array([1,0,0,1j])/np.sqrt(2)",
+    "val = n_tangle(psi)",
+    "assert np.isclose(val, 1.0, rtol=1e-4, atol=1e-4)"
+  ],
+  "sub_steps": [
+    {
+      "step_number": "19.1",
+      "step_name": "sigma_y_tensor_power",
+      "step_description_prompt": "Write a function that computes the tensor product of n Pauli Y matrices.",
+      "step_background": "",
+      "ground_truth_code": "def sigma_y_tensor_power(n: int) -> np.ndarray:\n    sigma_y = np.array([[0, -1j],[1j, 0]])\n    if n == 1:\n        return sigma_y\n    product = sigma_y\n    for _ in range(n-1):\n        product = np.kron(product, sigma_y)\n    return product",
+      "function_header": "def sigma_y_tensor_power(n: int) -> np.ndarray:\n    \"\"\"\n    Compute (σ_y)^{⊗n}.\n\n    Args:\n        n (int): Number of times to tensor the Pauli Y matrix.\n\n    Returns:\n        np.ndarray: The n-fold tensor product of σ_y.\n    \"\"\"",
+      "test_cases": [
+        "# Test n=1",
+        "res = sigma_y_tensor_power(1)",
+        "expected = np.array([[0,-1j],[1j,0]])",
+        "assert np.allclose(res, expected, rtol=1e-4, atol=1e-4)",
+
+        "# Test n=2",
+        "res = sigma_y_tensor_power(2)",
+        "expected = np.kron(expected, expected)",
+        "assert np.allclose(res, np.kron(np.array([[0,-1j],[1j,0]]), np.array([[0,-1j],[1j,0]])))",
+
+        "# Test n=3",
+        "res = sigma_y_tensor_power(3)",
+        "assert res.shape == (8,8)",
+
+        "# Test n=5",
+        "res = sigma_y_tensor_power(5)",
+        "assert res.shape == (32,32)",
+
+        "# Test n=6",
+        "res = sigma_y_tensor_power(6)",
+        "assert res.shape == (64,64)"
+      ]
+    },
+    {
+      "step_number": "19.2",
+      "step_name": "n_tangle",
+      "step_description_prompt": "Compute the n-tangle of an n-qubit state. The state length is 2^n with n even.",
+      "step_background": "",
+      "ground_truth_code": "def n_tangle(psi: np.ndarray, product: np.ndarray = None) -> float:\n    n = int(np.log2(len(psi)))\n    if n % 2 != 0:\n        raise ValueError(\"n must be even.\")\n    if product is None:\n        product = sigma_y_tensor_power(n)\n    psi_star = product @ psi\n    val = np.inner(np.conj(psi), psi_star)\n    return np.abs(val)**2",
+      "function_header": "def n_tangle(psi: np.ndarray, product: np.ndarray = None) -> float:\n    \"\"\"\n    Compute the n-tangle of an n-qubit pure state for even n.\n\n    Args:\n        psi (np.ndarray): 1D complex array representing the state vector (length 2^n, n even).\n        product (np.ndarray, optional): Precomputed σ_y^{⊗n}.\n\n    Returns:\n        float: The n-tangle.\n\n    Raises:\n        ValueError: If n is not even.\n    \"\"\"",
+      "test_cases": [
+        "# Test 1: 2-qubit maximally entangled Bell state |Φ+⟩ = (|00⟩ + |11⟩)/√2",
+        "psi = np.array([1, 0, 0, 1]) / np.sqrt(2)",
+        "sigma_y = np.array([[0,-1j],[1j,0]])",
+        "product = np.kron(sigma_y, sigma_y)",
+        "target = 1.0",
+        "assert np.isclose(n_tangle(psi, product), target, rtol=1e-4, atol=1e-4)",
+
+        "# Test 2: 4-qubit GHZ state |GHZ₄⟩ = (|0000⟩ + |1111⟩)/√2",
+        "psi = np.zeros(16, dtype=complex)",
+        "psi[0] = 1/np.sqrt(2)",
+        "psi[15] = 1/np.sqrt(2)",
+        "sigma_y = np.array([[0,-1j],[1j,0]])",
+        "product = sigma_y",
+        "for i in range(3):",
+        "    product = np.kron(product, sigma_y)",
+        "target = 1.0",
+        "assert np.isclose(n_tangle(psi, product), target, rtol=1e-4, atol=1e-4)",
+
+        "# Test 3: 4-qubit W state |W₄⟩ = (|0001⟩ + |0010⟩ + |0100⟩ + |1000⟩)/2",
+        "psi = np.zeros(16, dtype=complex)",
+        "psi[1] = 1/2",
+        "psi[2] = 1/2",
+        "psi[4] = 1/2",
+        "psi[8] = 1/2",
+        "sigma_y = np.array([[0,-1j],[1j,0]])",
+        "product = sigma_y",
+        "for i in range(3):",
+        "    product = np.kron(product, sigma_y)",
+        "target = 0.0",
+        "assert np.isclose(n_tangle(psi, product), target, rtol=1e-4, atol=1e-4)",
+
+        "# Test 4: Product state |01⟩ (no entanglement)",
+        "psi = np.kron([0, 1], [0.8, 0.6])",
+        "sigma_y = np.array([[0,-1j],[1j,0]])",
+        "product = np.kron(sigma_y, sigma_y)",
+        "target = 0.0",
+        "assert np.isclose(n_tangle(psi, product), target, rtol=1e-4, atol=1e-4)",
+
+        "# Test 5: Product state with complex amplitudes (1/2)*|00⟩ + (1/2)*|01⟩ + (i/2)*|10⟩ + (i/2)*|11⟩",
+        "psi = np.array([1/2, 1/2, 1j/2, 1j/2])",
+        "sigma_y = np.array([[0,-1j],[1j,0]])",
+        "product = np.kron(sigma_y, sigma_y)",
+        "target = 0.0",
+        "assert np.isclose(n_tangle(psi, product), target, rtol=1e-4, atol=1e-4)",
+
+        "# Test 6: Sweep of 2-qubit states with varying levels of entanglement",
+        "alpha = np.linspace(0, np.pi/2, 10)",
+        "target = [0.0, 0.11697777844051092, 0.41317591116653485, 0.7499999999999999, 0.9698463103929539,",
+        "0.9698463103929543, 0.7500000000000003, 0.413175911166535, 0.11697777844051105, 1.4997597826618576e-32]",
+        "sigma_y = np.array([[0,-1j],[1j,0]])",
+        "product = np.kron(sigma_y, sigma_y)",
+        "for i in range(len(target)):",
+        "    psi = np.cos(alpha[i]) * np.array([1,0,0,0]) + np.sin(alpha[i]) * np.array([0,0,0,1])",
+        "    assert np.isclose(target[i], n_tangle(psi, product), rtol=1e-4, atol=1e-4)",
+
+        "# Test 7: 2-qubit partial entanglement with phase",
+        "psi = np.array([np.sqrt(3/4),0,0,np.sqrt(1/4)*np.exp(1j*np.pi/4)])",
+        "sigma_y = np.array([[0,-1j],[1j,0]])",
+        "product = np.kron(sigma_y, sigma_y)",
+        "target = 3/8",
+        "assert np.isclose(n_tangle(psi, product), target, rtol=1e-4, atol=1e-4)"
+      ]
+    }
+  ]
+}
