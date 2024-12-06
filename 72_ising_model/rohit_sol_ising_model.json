@@ -1,0 +1,124 @@
+{
+    "problem_id": "72",
+    "problem_name": "ising_model",
+    "problem_description_main": "Implement a classical 2D Ising model with periodic boundary conditions using the Metropolis-Hastings algorithm. The lattice has dimensions (N, N) with coupling J=1 and no external field B=0. Run the simulation over a range of temperatures and use the results to estimate the transition temperature at which a phase transition occurs from an ordered (magnetized) to a disordered (non-magnetized) state.",
+    "problem_background_main": "The 2D Ising model is a classical model in statistical mechanics, consisting of a 2D lattice of spins that can take values ±1. Spins interact with their nearest neighbors, and at low temperatures, the system tends to be magnetized (ordered), while at high temperatures, it becomes disordered. By simulating the model at various temperatures and analyzing the magnetization, one can estimate the critical temperature at which the phase transition occurs, without needing to know it a priori.",
+    "required_dependencies": "import numpy as np",
+    "problem_io": "'''\nInput:\n    Ts (list of float): List of temperatures at which to run the simulation.\n    N (int): System size along one axis.\n    nsweeps (int): Number of sweeps to perform at each temperature.\n\nOutput:\n    mag2_avg (list of float): A list of average magnetization² values corresponding to each temperature in Ts.\n\nAfter obtaining mag2_avg, one can use calc_transition_temperature(T_list, mag2_list) to estimate the transition temperature.\n'''",
+    "sub_steps": [
+        {
+            "step_number": "72.1",
+            "step_name": "neighbor_list",
+            "step_description_prompt": "Return the 4 nearest neighbors of a spin at site (i, j) in a periodic lattice of dimension (N, N).",
+            "step_background": "Each spin has four neighbors (up, down, left, right). With periodic boundary conditions, indices wrap around the lattice edges.",
+            "function_header": "def neighbor_list(site: tuple, N: int) -> list:\n    \"\"\"\n    Return all nearest neighbors of site (i, j) in a periodic lattice.\n\n    Args:\n        site (tuple): (i, j) site indices.\n        N (int): The size of the lattice.\n\n    Returns:\n        list: [(i_left, j), (i, j_above), (i_right, j), (i, j_below)] with wrapping.\n    \"\"\"",
+            "ground_truth_code": "def neighbor_list(site: tuple, N: int) -> list:\n    i, j = site\n    neighbors = [\n        ((i - 1) % N, j),\n        (i, (j + 1) % N),\n        ((i + 1) % N, j),\n        (i, (j - 1) % N)\n    ]\n    return neighbors",
+            "test_cases": [
+                "# Test 1:\nN = 10\nresult = neighbor_list((0,0), N)\nexpected = [(9,0),(0,1),(1,0),(0,9)]\nassert result == expected",
+                "# Test 2:\nN = 10\nresult = neighbor_list((9,9), N)\nexpected = [(8,9),(9,0),(0,9),(9,8)]\nassert result == expected",
+                "# Test 3:\nN = 10\nresult = neighbor_list((5,0), N)\nexpected = [(4,0),(5,1),(6,0),(5,9)]\nassert result == expected"
+            ],
+            "return_line": "return neighbors"
+        },
+        {
+            "step_number": "72.2",
+            "step_name": "energy_site",
+            "step_description_prompt": "Calculate the energy contribution of a spin at site (i, j).",
+            "step_background": "Energy at a site (i, j) is E_ij = - s_ij * sum_of_neighbor_spins.",
+            "function_header": "def energy_site(i: int, j: int, lattice: np.ndarray) -> float:\n    \"\"\"\n    Calculate the energy contribution of a spin at site (i, j).\n\n    Args:\n        i (int), j (int): site indices.\n        lattice (np.ndarray): NxN array of spins.\n\n    Returns:\n        float: energy contribution of site (i, j).\n    \"\"\"",
+            "ground_truth_code": "def energy_site(i: int, j: int, lattice: np.ndarray) -> float:\n    N = lattice.shape[0]\n    spin = lattice[i, j]\n    neighs = neighbor_list((i, j), N)\n    energy = -spin * sum(lattice[x, y] for x, y in neighs)\n    return energy",
+            "test_cases": [
+                "# Test:\nlattice = np.array([[ 1,-1, 1, 1],[-1,-1, 1,1],[-1,-1,1,1],[1,-1,-1,-1]])\ni,j=1,2\nneighbors = neighbor_list((1,2), lattice.shape[0])\nexpected = -1*(lattice[0,2]+lattice[1,3]+lattice[2,2]+lattice[1,1])\nresult = energy_site(i,j,lattice)\nassert result == expected"
+            ],
+            "return_line": "return energy"
+        },
+        {
+            "step_number": "72.3",
+            "step_name": "total_energy",
+            "step_description_prompt": "Calculate the total energy of the lattice.",
+            "step_background": "Sum over unique nearest neighbor pairs to avoid double counting.",
+            "function_header": "def total_energy(lattice: np.ndarray) -> float:\n    \"\"\"\n    Calculate the total energy of the lattice.\n\n    Args:\n        lattice (np.ndarray): NxN array of spins.\n\n    Returns:\n        float: total energy.\n    \"\"\"",
+            "ground_truth_code": "def total_energy(lattice: np.ndarray) -> float:\n    N = lattice.shape[0]\n    E = 0\n    for i in range(N):\n        for j in range(N):\n            s = lattice[i, j]\n            # only count right and down neighbors to avoid double counting\n            right = lattice[i, (j+1)%N]\n            down = lattice[(i+1)%N, j]\n            E += -s*right\n            E += -s*down\n    return E",
+            "test_cases": [
+                "# Basic test with small lattice.\nlattice = np.array([[1,1],[1,1]])\nE = total_energy(lattice)\n# Each bond is -1, 4 bonds counted once = -4*2= -8 if 2D pbc.\nassert E == -8"
+            ],
+            "return_line": "return E"
+        },
+        {
+            "step_number": "72.4",
+            "step_name": "magnetization",
+            "step_description_prompt": "Calculate total magnetization.",
+            "step_background": "M = sum of all spins",
+            "function_header": "def magnetization(lattice: np.ndarray) -> int:\n    \"\"\"\n    Calculate total magnetization.\n\n    Args:\n        lattice: NxN array of spins.\n\n    Returns:\n        int: total magnetization\n    \"\"\"",
+            "ground_truth_code": "def magnetization(lattice: np.ndarray) -> int:\n    return np.sum(lattice)",
+            "test_cases": [
+                "# Test magnetization\nlattice = np.array([[1,1],[1,-1]])\nmag = magnetization(lattice)\nassert mag == 2"
+            ],
+            "return_line": "return np.sum(lattice)"
+        },
+        {
+            "step_number": "72.5",
+            "step_name": "get_flip_probability_magnetization",
+            "step_description_prompt": "Calculate acceptance probability and ΔM for flipping spin (i,j).",
+            "step_background": "A = min(1,exp(-βΔE)), ΔM = -2*s_ij",
+            "function_header": "def get_flip_probability_magnetization(lattice: np.ndarray, i: int, j: int, beta: float) -> tuple:\n    \"\"\"\n    Calculate spin flip acceptance probability and ΔM.\n\n    Args:\n        lattice: NxN spins.\n        i,j: site\n        beta: inverse temperature\n\n    Returns:\n        (float, int): (A, dM)\n    \"\"\"",
+            "ground_truth_code": "def get_flip_probability_magnetization(lattice: np.ndarray, i: int, j: int, beta: float) -> tuple:\n    current_E = energy_site(i,j,lattice)\n    spin = lattice[i,j]\n    flipped_lattice = lattice.copy()\n    flipped_lattice[i,j]*=-1\n    new_E = energy_site(i,j,flipped_lattice)\n    dE = new_E - current_E\n    A = min(1,np.exp(-beta*dE))\n    dM = -2*spin\n    return A,dM",
+            "test_cases": [
+                "# Just check correctness for a known configuration.\nlattice = np.array([[1,-1],[ -1,1]])\ni,j=0,0\nbeta=1.0\nA,dM = get_flip_probability_magnetization(lattice,i,j,beta)\nassert isinstance(A,float)\nassert isinstance(dM,int)"
+            ],
+            "return_line": "return A,dM"
+        },
+        {
+            "step_number": "72.6",
+            "step_name": "metropolis_sweep",
+            "step_description_prompt": "Perform one Metropolis sweep.",
+            "step_background": "Visit each spin and attempt a flip.",
+            "function_header": "def metropolis_sweep(lattice: np.ndarray, beta: float) -> np.ndarray:\n    \"\"\"\n    Perform one Metropolis sweep.\n\n    Args:\n        lattice: NxN spins.\n        beta: inverse temperature\n\n    Returns:\n        np.ndarray: updated lattice\n    \"\"\"",
+            "ground_truth_code": "def metropolis_sweep(lattice: np.ndarray, beta: float) -> np.ndarray:\n    N = lattice.shape[0]\n    for i in range(N):\n        for j in range(N):\n            A,dM = get_flip_probability_magnetization(lattice,i,j,beta)\n            if np.random.rand()<A:\n                lattice[i,j]*=-1\n    return lattice",
+            "test_cases": [
+                "# Due to stochastic nature, just ensure shape and valid spins.\nlattice = np.array([[1,-1],[-1,1]])\nnp.random.seed(0)\nres = metropolis_sweep(lattice.copy(), 1.0)\nassert res.shape==(2,2)\nassert np.all(np.isin(res,[-1,1]))"
+            ],
+            "return_line": "return lattice"
+        },
+        {
+            "step_number": "72.7",
+            "step_name": "run_simulation",
+            "step_description_prompt": "Run the Ising simulation at a given temperature T for nsweeps.",
+            "step_background": "Collect mag² each sweep.",
+            "function_header": "def run_simulation(T: float, N: int, nsweeps: int) -> np.ndarray:\n    \"\"\"\n    Run simulation at temperature T.\n\n    Args:\n        T(float)\n        N(int)\n        nsweeps(int)\n\n    Returns:\n        np.ndarray: mag² per sweep\n    \"\"\"",
+            "ground_truth_code": "def run_simulation(T: float, N: int, nsweeps: int) -> np.ndarray:\n    beta = 1.0/T\n    lattice = np.random.choice([-1,1],size=(N,N))\n    mag2=[]\n    for _ in range(nsweeps):\n        lattice=metropolis_sweep(lattice,beta)\n        m=magnetization(lattice)\n        mag2.append((m**2)/(N**4))\n    return np.array(mag2)",
+            "test_cases": [
+                "# Basic test\nnp.random.seed(0)\nvals=run_simulation(2.0,5,5)\nassert len(vals)==5"
+            ],
+            "return_line": "return np.array(mag2)"
+        },
+        {
+            "step_number": "72.8",
+            "step_name": "scan_temperatures",
+            "step_description_prompt": "Run simulations over a list of temperatures.",
+            "step_background": "For each T in Ts, run_simulation and record average mag².",
+            "function_header": "def scan_temperatures(Ts: list, N: int, nsweeps: int) -> list:\n    \"\"\"\n    Run simulations over given temperatures.\n\n    Args:\n        Ts(list of float)\n        N(int)\n        nsweeps(int)\n\n    Returns:\n        list: average mag² at each T\n    \"\"\"",
+            "ground_truth_code": "def scan_temperatures(Ts: list, N: int, nsweeps: int) -> list:\n    mag2_avg=[]\n    for T in Ts:\n        mag2=run_simulation(T,N,nsweeps)\n        mag2_avg.append(np.mean(mag2))\n    return mag2_avg",
+            "test_cases": [
+                "# Check length\nTs=[1.6,2.1,2.5]\nnp.random.seed(0)\nres=scan_temperatures(Ts,5,5)\nassert len(res)==len(Ts)"
+            ],
+            "return_line": "return mag2_avg"
+        },
+        {
+            "step_number": "72.9",
+            "step_name": "calc_transition_temperature",
+            "step_description_prompt": "Estimate transition temperature from T_list and mag²_list by checking where derivative of mag² w.r.t T is minimal.",
+            "step_background": "No need to specify exact T_c, just estimate.",
+            "function_header": "def calc_transition_temperature(T_list: list, mag2_list: list) -> float:\n    \"\"\"\n    Estimate the transition temperature.\n\n    Args:\n        T_list(list): temperatures\n        mag2_list(list): average mag² for each T\n\n    Returns:\n        float: estimated transition temperature\n    \"\"\"",
+            "ground_truth_code": "def calc_transition_temperature(T_list: list, mag2_list: list) -> float:\n    dmag2 = np.gradient(mag2_list,T_list)\n    T_transition=T_list[np.argmin(dmag2)]\n    return T_transition",
+            "test_cases": [
+                "# We'll just ensure it returns something reasonable.\nTs=[1.6,2.1,2.5]\nmag2=[0.9,0.5,0.1]\nT_transition=calc_transition_temperature(Ts,mag2)\nassert 1.6<=T_transition<=2.5"
+            ],
+            "return_line": "return T_transition"
+        }
+    ],
+    "general_solution": "import numpy as np\n\ndef neighbor_list(site: tuple, N: int) -> list:\n    i, j = site\n    return [((i - 1) % N, j), (i, (j + 1) % N), ((i + 1) % N, j), (i, (j - 1) % N)]\n\ndef energy_site(i: int, j: int, lattice: np.ndarray) -> float:\n    N = lattice.shape[0]\n    spin = lattice[i, j]\n    neighs = neighbor_list((i, j), N)\n    return -spin * sum(lattice[x, y] for x, y in neighs)\n\ndef total_energy(lattice: np.ndarray) -> float:\n    N = lattice.shape[0]\n    E = 0\n    for i in range(N):\n        for j in range(N):\n            s = lattice[i, j]\n            right = lattice[i, (j+1)%N]\n            down = lattice[(i+1)%N, j]\n            E += -s*right\n            E += -s*down\n    return E\n\ndef magnetization(lattice: np.ndarray) -> int:\n    return np.sum(lattice)\n\ndef get_flip_probability_magnetization(lattice: np.ndarray, i: int, j: int, beta: float) -> tuple:\n    current_E = energy_site(i,j,lattice)\n    spin = lattice[i,j]\n    flipped = lattice.copy()\n    flipped[i,j]*=-1\n    new_E = energy_site(i,j,flipped)\n    dE = new_E - current_E\n    A = min(1, np.exp(-beta*dE))\n    dM = -2*spin\n    return A,dM\n\ndef metropolis_sweep(lattice: np.ndarray, beta: float) -> np.ndarray:\n    N = lattice.shape[0]\n    for i in range(N):\n        for j in range(N):\n            A,dM = get_flip_probability_magnetization(lattice,i,j,beta)\n            if np.random.rand()<A:\n                lattice[i,j]*=-1\n    return lattice\n\ndef run_simulation(T: float, N: int, nsweeps: int) -> np.ndarray:\n    beta=1.0/T\n    lattice=np.random.choice([-1,1],size=(N,N))\n    mag2=[]\n    for _ in range(nsweeps):\n        lattice=metropolis_sweep(lattice,beta)\n        m=magnetization(lattice)\n        mag2.append((m**2)/(N**4))\n    return np.array(mag2)\n\ndef scan_temperatures(Ts: list, N: int, nsweeps: int) -> list:\n    mag2_avg=[]\n    for T in Ts:\n        vals=run_simulation(T,N,nsweeps)\n        mag2_avg.append(np.mean(vals))\n    return mag2_avg\n\ndef calc_transition_temperature(T_list: list, mag2_list: list) -> float:\n    dmag2 = np.gradient(mag2_list, T_list)\n    T_transition = T_list[np.argmin(dmag2)]\n    return T_transition",
+    "general_tests": [
+        "# Example test: Check if mag2 decreases as T increases (just a trend check)\nnp.random.seed(0)\nTs = [1.0, 1.5, 2.0]\nmag2 = scan_temperatures(Ts, N=5, nsweeps=10)\nassert len(mag2)==len(Ts)\n# Check trend: at low T (1.0), mag2 should be larger on average than at high T (2.0)\nassert mag2[0]>mag2[-1]"
+    ]
+}
