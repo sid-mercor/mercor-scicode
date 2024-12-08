@@ -1,4 +1,4 @@
-"{
+{
     "problem_name": "Multiparticle_dynamics_in_the_optical_tweezer_array",
     "problem_id": "32",
     "problem_description_main": "A system of $N$ identical nanospheres is trapped by an optical tweezer array that is arranged equidistantly along the $x$ axis. Each nanosphere is confined to oscillate near its equilibrium position because of the harmonic trapping forces from the linearly polarized optical tweezer array. The adjacent nanospheres interact via optical binding forces resulting from induced dipoles. Simulate the dynamics of phonon occupation using Python functionalities for small oscillations along the $x$-axis near the equilibrium positions of each sphere.",
