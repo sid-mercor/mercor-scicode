@@ -14,48 +14,9 @@
             "function_header": "def calculate_binding_force(P, phi, R, l, w, a, n):",
             "ground_truth_code": "def calculate_binding_force(P, phi, R, l, w, a, n):\n    '''\n    Function to calculate the optical binding force between two trapped nanospheres.\n\n    Parameters\n    ----------\n    P : list of floats\n        Power of the two optical traps.\n    phi : float\n        Polarization direction of the optical traps (radians).\n    R : float\n        Distance between the trapped nanospheres (meters).\n    l : float\n        Wavelength of the optical traps (meters).\n    w : float\n        Beam waist of the optical traps (meters).\n    a : float\n        Radius of the trapped nanospheres (meters).\n    n : float\n        Refractive index of the trapped nanospheres.\n\n    Returns\n    -------\n    F : float\n        The optical binding force between two trapped nanospheres (N).\n    '''\n    import numpy as np\n    from scipy.constants import epsilon_0, c\n\n    # Wave number\n    k = 2 * np.pi / l\n\n    # Scalar polarizability\n    alpha = (4 * np.pi * epsilon_0 * a**3 * (n**2 - 1)) / (n**2 + 2)\n\n    # Electric field of the optical traps\n    E1 = np.sqrt(4 * P[0] / (np.pi * w**2 * epsilon_0 * c))\n    E2 = np.sqrt(4 * P[1] / (np.pi * w**2 * epsilon_0 * c))\n\n    # Fx calculation\n    Fxx = (\n        2 * alpha**2 * E1 * E2 * np.cos(phi)**2 / (8 * np.pi * epsilon_0 * R**4)\n        * (-3 * np.cos(k * R) - 3 * k * R * np.sin(k * R) + (k * R)**2 * np.cos(k * R))\n    )\n    Fxy = (\n        alpha**2 * E1 * E2 * np.sin(phi)**2 / (8 * np.pi * epsilon_0 * R**4)\n        * (3 * np.cos(k * R) + 3 * k * R * np.sin(k * R) - 2 * (k * R)**2 * np.cos(k * R) - (k * R)**3 * np.sin(k * R))\n    )\n\n    # Total force\n    F = Fxx + Fxy\n\n    return F",
             "test_cases": [
-                {
-                    "case_id": 1,
-                    "description": "Testing with standard parameters and phi=0",
-                    "inputs": {
-                        "P": [10000000, 100000000],
-                        "phi": 0,
-                        "R": 1.55e-6,
-                        "l": 1.55e-6,
-                        "w": 600e-9,
-                        "a": 100e-9,
-                        "n": 1.444
-                    },
-                    "expected": 2.090553478330249e-06
-                },
-                {
-                    "case_id": 2,
-                    "description": "Testing with phi=pi/2",
-                    "inputs": {
-                        "P": [10e6, 100e6],
-                        "phi": 1.5708,
-                        "R": 1.55e-6,
-                        "l": 1.55e-6,
-                        "w": 600e-9,
-                        "a": 100e-9,
-                        "n": 1.444
-                    },
-                    "expected": -2.17651746535146e-06
-                },
-                {
-                    "case_id": 3,
-                    "description": "Testing with phi=pi/4 and equal powers",
-                    "inputs": {
-                        "P": [1e9, 1e9],
-                        "phi": 0.7854,
-                        "R": 1.55e-6,
-                        "l": 1.55e-6,
-                        "w": 600e-9,
-                        "a": 100e-9,
-                        "n": 1.444
-                    },
-                    "expected": -1.3592099786808985e-06
-                }
+                "Case 1: P=[10000000, 100000000], phi=0, R=1.55e-6, l=1.55e-6, w=600e-9, a=100e-9, n=1.444. Expected: 2.090553478330249e-06.",
+                "Case 2: P=[10e6, 100e6], phi=1.5708, R=1.55e-6, l=1.55e-6, w=600e-9, a=100e-9, n=1.444. Expected: -2.17651746535146e-06.",
+                "Case 3: P=[1e9, 1e9], phi=0.7854, R=1.55e-6, l=1.55e-6, w=600e-9, a=100e-9, n=1.444. Expected: -1.3592099786808985e-06."
             ],
             "return_line": "return F"
         }
