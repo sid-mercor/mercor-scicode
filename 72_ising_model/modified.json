@@ -2,7 +2,7 @@
     "problem_name": "ising_model",
     "problem_id": "72",
     "problem_description_main": "Implement a 2D Ising classical model with periodic boundary conditions using the Metropolis-Hastings algorithm. The lattice has dimensions $(N, N)$ with spin interaction energy, $J = 1$, and no external magnetic field, $B = 0$. Write a Python script to simulate a 2D periodic Ising model to perform the simulation on a lattice over a range of temperatures to compute the transition/critical temperature at which a phase transition occurs from an ordered (magnetized) state to a disordered (non-magnetized) state.",
-    "problem_io": "'''\nInput: \nTs (float): List of temperatures to simulate.\nN (int): Size of the lattice (N x N).\nnsweeps: Number of sweeps to perform at each temperature.\n\nOutput:\nTc (float): Estimated critical/transition temperature\n\n'''",
+    "problem_io": "'''\nArgs: \nTs (float): List of temperatures to simulate.\nN (int): Size of the lattice (N x N).\nnsweeps: Number of sweeps to perform at each temperature.\n\nReturns:\nTc (float): Estimated critical/transition temperature\n\n'''",
     "required_dependencies": "import numpy as np",
     "sub_steps": [
         {
