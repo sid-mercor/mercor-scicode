@@ -19,65 +19,7 @@
                 "Case 3: P=[1e9, 1e9], phi=0.7854, R=1.55e-6, l=1.55e-6, w=600e-9, a=100e-9, n=1.444. Expected: -1.3592099786808985e-06."
             ],
             "return_line": "return F"
-        },
-        {
-            "step_number": "32.2",
-            "step_name": "Generate Hamiltonian",
-            "step_description_prompt": "Develop a Python function to compute the Hamiltonian for the provided nanospherical system, taking into account the linearized optical binding force acting upon the trapped nanospheres.",
-            "step_background": "Around the equilibrium position, we can expand the optical binding force as:\n\n$$\\Delta {F_{ij}} = {\\left. {\\Delta R\\frac{{d{F_x}}}{{dR}}} \\right|_{x = \\left| {i - j} \\right|d}} \\equiv {k_{ij}}\\Delta R,$$\n\nthen the linearized dynamics along the tweezer array for the $i$th nanosphere can be written as:\n\n$$m{\\ddot x_i} + k_i{x_i} + \\sum\\limits_{j \\ne i} {{k_{ij}}({x_i} - {x_j})}  = 0.$$ \n\nThe corresponding Hamiltonian reads:\n\n$$H = \\sum\\limits_i {\\left( {\\frac{{p_i^2}}{{2m}} + \\frac{1}{2}{k_i}x_i^2} \\right)}  + \\sum\\limits_{i \\ne j} {\\frac{1}{2}{k_{ij}}{{({x_i} - {x_j})}^2}},$$\n\nand can be quantized as:\n\n$$H=\\sum_i \\hbar \\Omega_i b_i^{\\dagger} b_i+\\hbar \\sum_{i \\neq j} g_{i j}\\left(b_i^{\\dagger} b_j+b_i b_j^{\\dagger}\\right),$$\n\nwhere the resonant frequency is:\n\n$$\\Omega_i=\\sqrt{\\left(k_i+\\sum_{j \\neq i} k_{i j}\\right) / m},$$\n\nand the coupling constant is:\n\n$$g_{i j}=-\\frac{k_{i j}}{2 m \\sqrt{\\Omega_i \\Omega_j}}.$$ \n\nThis Hamiltonian can be expressed in matrix form as $H_{ii}= \\Omega_i$ and $H_{ij} = g_{i j}$. The Hamiltonian represents the coupled oscillatory system, incorporating resonant frequencies and coupling constants between nanospheres. These parameters are derived from linearized binding forces.",
-            "function_header": "def generate_hamiltonian(P, phi, R, l, w, a, n, N, rho):",
-            "ground_truth_code": "def generate_hamiltonian(P, phi, R, l, w, a, n, N, rho):\n    '''Function to compute the Hamiltonian matrix for a nanospherical system.'''\n    import numpy as np\n    m = (4 / 3) * np.pi * a**3 * rho\n    H = np.zeros((N, N))\n    for i in range(N):\n        # Diagonal terms (resonant frequencies)\n        H[i, i] = np.sqrt(\n            calculate_binding_force([P[i], P[i]], phi, R, l, w, a, n) / m\n        )\n        # Off-diagonal terms (coupling constants)\n        if i > 0:\n            coupling = calculate_binding_force([P[i - 1], P[i]], phi, R, l, w, a, n)\n            H[i, i - 1] = H[i - 1, i] = -coupling / (2 * m * np.sqrt(H[i, i] * H[i - 1, i - 1]))\n    return H",
-            "test_cases": [
-                {
-                    "case_id": 1,
-                    "description": "Small system of 5 nanospheres with typical parameters and phi=pi/2.",
-                    "inputs": {
-                        "P": [100e-3] * 5,
-                        "phi": 1.5708,
-                        "R": 0.99593306197 * 1550e-9,
-                        "l": 1550e-9,
-                        "w": 600e-9,
-                        "a": 100e-9,
-                        "n": 1.444,
-                        "N": 5,
-                        "rho": 2.648e3
-                    },
-                    "expected": "Hamiltonian matrix with accurate diagonal and off-diagonal elements."
-                },
-                {
-                    "case_id": 2,
-                    "description": "Small system of 5 nanospheres with larger inter-sphere distance.",
-                    "inputs": {
-                        "P": [100e-3] * 5,
-                        "phi": 1.5708,
-                        "R": 2 * 1550e-9,
-                        "l": 1550e-9,
-                        "w": 600e-9,
-                        "a": 100e-9,
-                        "n": 1.444,
-                        "N": 5,
-                        "rho": 2.648e3
-                    },
-                    "expected": "Hamiltonian matrix with reduced coupling constants due to increased distance."
-                },
-                {
-                    "case_id": 3,
-                    "description": "Small system of 5 nanospheres with phi=0 and uniform laser power.",
-                    "inputs": {
-                        "P": [100e-3] * 5,
-                        "phi": 0,
-                        "R": 1.55e-6,
-                        "l": 1550e-9,
-                        "w": 600e-9,
-                        "a": 100e-9,
-                        "n": 1.444,
-                        "N": 5,
-                        "rho": 2.648e3
-                    },
-                    "expected": "Hamiltonian matrix with consistent diagonal terms and strong coupling."
-                }
-            ],
-            "return_line": "return H"
+        }
         }
     ]
 }
