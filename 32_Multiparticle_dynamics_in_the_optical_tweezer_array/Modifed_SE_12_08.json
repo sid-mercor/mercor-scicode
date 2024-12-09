@@ -72,8 +72,7 @@
             ]
         }
     ]
-}
-
+},
           {
             "step_number": "32.3",
             "step_name": "Runge-Kutta for Phonon Dynamics",
