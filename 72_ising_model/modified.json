@@ -48,7 +48,7 @@
                 "# Test 1:\nlattice = np.array([[1, 1, 1, -1], [-1, 1, -1, -1], [-1, -1, 1, 1], [-1, 1, 1, 1]])\nresult_E = total_energy(lattice)\ntarget = 0  # Example value (needs calculation)\nassert result_E == target, f\"target {target}, but got {result_E}\"",
                 "# Test 2:\nlattice = np.array([[1, 1], [1, 1]])\nresult_E = total_energy(lattice)\ntarget = -4  # Each bond counts once\nassert result_E == target, f\"target {target}, but got {result_E}\"",
                 "# Test 3:\nlattice = np.array([[-1, -1], [-1, -1]])\nresult_E = total_energy(lattice)\ntarget = -4 \nassert result_E == target, f\"target {target}, but got {result_E}\"",
-                "# Test 4:\nlattice = np.array([[1, -1, 1],[-1, 1, 1],[1, 1, -1]])\nresult_E = total_energy(lattice)\ntarget = 3 \nassert result_E == target, f\"target {target}, but got {result_E}\"",                
+                "# Test 4:\nlattice = np.array([[1, -1, 1],[-1, 1, 1],[1, 1, -1]])\nresult_E = total_energy(lattice)\ntarget = 3 \nassert result_E == target, f\"target {target}, but got {result_E}\""                
             ],
             "return_line": "return total_energy",
             "step_background": "The total energy, which is also represented as Hamiltonian is calculated by summing the energy contributions of all unique pairs of nearest neighbors to avoid double counting. This can be achieved by summing over each site and considering only the right and below neighbors.\n\nThe Hamiltonian is given by:\n\n$H = -J \\sum_{\\langle i, j \\rangle} s_i s_j - B \\sum_{k} s_k$\n\n$H= - \\sum_{\\langle i,j \\rangle} s_i s_j$ # For $J=1$ and $B=0$\n\nwhere $\\langle i, j \\rangle$ iterates over unique pairs of nearest neighbors.",
