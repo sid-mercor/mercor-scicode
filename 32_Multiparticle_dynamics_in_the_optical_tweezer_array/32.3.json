@@ -3,14 +3,14 @@
     "problem_id": "32",
     "problem_description_main": "A system of $N$ identical nanospheres is trapped by an optical tweezer array that is arranged equidistantly along the $x$ axis. Each nanosphere is confined to oscillate near its equilibrium position because of the harmonic trapping forces from the linearly polarized optical tweezer array. The adjacent nanospheres interact via optical binding forces resulting from induced dipoles. Simulate the dynamics of phonon occupation using Python functionalities for small oscillations along the $x$-axis near the equilibrium positions of each sphere.",
     "problem_background_main": "In an optical tweezer array, trapped nanospheres experience optical binding forces due to interactions between their induced dipoles and external fields. These forces, combined with damping and vibrational couplings, govern the dynamics of phonon occupation. This problem explores these dynamics by modeling the system as coupled harmonic oscillators.",
-    "problem_io": "Input: N : int Number of trapped nanospheres. t0 : float Time point to compute phonon occupation. R : float Distance between adjacent nanospheres. l : float Wavelength of optical traps. phi : float Polarization angle of the traps. Gamma : float Damping coefficient of nanospheres. P : list of floats Power of optical traps for each nanosphere. n0 : list of floats Initial phonon occupation numbers. w : float Beam waist of optical traps. a : float Radius of nanospheres. n : float Refractive index of nanospheres. rho : float Density of nanospheres. Output: nf : list of floats Phonon occupation numbers at time t0.",
+    "problem_io": "'''Input: N : int Number of trapped nanospheres. t0 : float Time point to compute phonon occupation. R : float Distance between adjacent nanospheres. l : float Wavelength of optical traps. phi : float Polarization angle of the traps. Gamma : float Damping coefficient of nanospheres. P : list of floats Power of optical traps for each nanosphere. n0 : list of floats Initial phonon occupation numbers. w : float Beam waist of optical traps. a : float Radius of nanospheres. n : float Refractive index of nanospheres. rho : float Density of nanospheres. Output: nf : list of floats Phonon occupation numbers at time t0.'''",
     "required_dependencies": "import numpy as np\nfrom scipy.constants import epsilon_0, c",
     "sub_steps": [
         {
             "step_number": "32.3",
             "step_name": "Runge-Kutta for Phonon Dynamics",
-            "step_description_prompt": "Write a Python function to implement the fourth-order Runge-Kutta (RK4) method to simulate phonon occupation dynamics of the trapped nanosphere system with the correlation matrix $C_{ij} = \\langle b_i^\\dagger b_j \\rangle$ and the master equation in Lindblad form.",
-            "step_background": "The Lindblad master equation governs the evolution of the correlation matrix $C_{ij} = \\langle b_i^\\dagger b_j \\rangle$, describing the dynamics of an open quantum system. The equation is given as: \\(\\dot{C} = i[H, C] + \\{L, C\\} + M\\), where: (1) \\(H\\) is the system Hamiltonian, which determines coherent dynamics, (2) \\(L = -\\frac{1}{2} \\operatorname{Diag}(\\Gamma_1, \\Gamma_2, \\ldots, \\Gamma_N)\\) is the dissipation matrix describing loss rates, and (3) \\(M = \\operatorname{Diag}(\\Gamma_1 n_1^{\\text{th}}, \\Gamma_2 n_2^{\\text{th}}, \\ldots, \\Gamma_N n_N^{\\text{th}})\\) is the reservoir matrix describing thermal effects. The standard Fourth-Order Runge-Kutta (RK4) method is used to numerically solve this equation. At each time step \\(n\\), the next state \\(C_{n+1}\\) is computed as: \\(C_{n+1} = C_n + \\frac{\\Delta t}{6}(k_1 + 2k_2 + 2k_3 + k_4)\\), where: \\(k_1 = i[H, C_n] + \\{L, C_n\\} + M\\), \\(k_2 = i[H, C_n + \\frac{1}{2}k_1 \\Delta t] + \\{L, C_n + \\frac{1}{2}k_1 \\Delta t\\} + M\\), \\(k_3 = i[H, C_n + \\frac{1}{2}k_2 \\Delta t] + \\{L, C_n + \\frac{1}{2}k_2 \\Delta t\\} + M\\), \\(k_4 = i[H, C_n + k_3 \\Delta t] + \\{L, C_n + k_3 \\Delta t\\} + M\\). The RK4 method provides a robust way to integrate the Lindblad equation, ensuring stability and accuracy in capturing the system's evolution under dissipation and external fields.",
+            "step_description_prompt": "Write a Python function to implement the fourth-order Runge-Kutta (RK4) method to simulate phonon occupation dynamics of the trapped nanosphere system with the correlation matrix $C_{ij} = \\left\\langle {b_i^\\dagger {b_j}} \\right\\rangle$ and the master equation in Lindblad form.",
+            "step_background": "The Lindblad master equation governs the evolution of the correlation matrix $C_{ij} = \\langle b_i^\\dagger b_j \\rangle$, describing the dynamics of an open quantum system. The equation is given as: \\(\\dot{C} = i[H, C] + \\{L, C\\} + M\\), where:\\n\\n- \\(H\\) is the system Hamiltonian, which determines coherent dynamics,\\n- \\(L = -\\frac{1}{2} \\operatorname{Diag}(\\Gamma_1, \\Gamma_2, \\ldots, \\Gamma_N)\\) is the dissipation matrix describing loss rates, and\\n- \\(M = \\operatorname{Diag}(\\Gamma_1 n_1^{\\text{th}}, \\Gamma_2 n_2^{\\text{th}}, \\ldots, \\Gamma_N n_N^{\\text{th}})\\) is the reservoir matrix describing thermal effects.\\n\\nThe standard Fourth-Order Runge-Kutta (RK4) method is used to numerically solve this equation. At each time step \\(n\\), the next state \\(C_{n+1}\\) is computed as:\\n\\n\\[C_{n+1} = C_n + \\frac{\\Delta t}{6}(k_1 + 2k_2 + 2k_3 + k_4)\\],\\n\\nwhere:\\n\\n\\(k_1 = i[H, C_n] + \\{L, C_n\\} + M\\),\\n\\(k_2 = i[H, C_n + \\frac{1}{2}k_1 \\Delta t] + \\{L, C_n + \\frac{1}{2}k_1 \\Delta t\\} + M\\),\\n\\(k_3 = i[H, C_n + \\frac{1}{2}k_2 \\Delta t] + \\{L, C_n + \\frac{1}{2}k_2 \\Delta t\\} + M\\),\\n\\(k_4 = i[H, C_n + k_3 \\Delta t] + \\{L, C_n + k_3 \\Delta t\\} + M\\).\\n\\nThe RK4 method provides a robust way to integrate the Lindblad equation, ensuring stability and accuracy in capturing the system's evolution under dissipation and external fields.",
             "function_header": "def runge_kutta_dynamics(C0, H, L, M, t0, steps):",
             "ground_truth_code": "def runge_kutta_dynamics(C0, H, L, M, t0, steps):\n    \"\"\"\n    Solve the Lindblad master equation with the Runge-Kutta method.\n\n    Parameters:\n    C0 : np.ndarray\n        Initial correlation matrix (N x N).\n    H : np.ndarray\n        System Hamiltonian (N x N).\n    L : np.ndarray\n        Dissipation matrix (N x N).\n    M : np.ndarray\n        Reservoir matrix (N x N).\n    t0 : float\n        Final time for the simulation.\n    steps : int\n        Number of simulation steps.\n\n    Returns:\n    np.ndarray\n        Diagonal elements of the final correlation matrix representing phonon occupation numbers.\n    \"\"\"\n    delta_t = t0 / steps\n    C = np.array(C0, dtype=np.complex128)\n\n    def commutator(A, B):\n        \"\"\"Compute the commutator [A, B] = AB - BA.\"\"\"\n        return np.dot(A, B) - np.dot(B, A)\n\n    def anticommutator(A, B):\n        \"\"\"Compute the anticommutator {A, B} = AB + BA.\"\"\"\n        return np.dot(A, B) + np.dot(B, A)\n\n    for _ in range(steps):\n        k1 = 1j * commutator(H, C) + anticommutator(L, C) + M\n        k2 = 1j * commutator(H, C + 0.5 * k1 * delta_t) + anticommutator(L, C + 0.5 * k1 * delta_t) + M\n        k3 = 1j * commutator(H, C + 0.5 * k2 * delta_t) + anticommutator(L, C + 0.5 * k2 * delta_t) + M\n        k4 = 1j * commutator(H, C + k3 * delta_t) + anticommutator(L, C + k3 * delta_t) + M\n        C += (delta_t / 6) * (k1 + 2 * k2 + 2 * k3 + k4)\n\n    return np.diag(C).real",
             "test_cases": [
@@ -22,10 +22,31 @@
                     "M": "np.identity(5) * 1e-5",
                     "t0": 0.02,
                     "steps": 100,
-                    "expected_output": "[6762435.17, 270122.38, 10004196.46, 19073172.62, 3440024.54]"
+                    "expected_output": "[ 6762435.17, 270122.38, 10004196.46, 19073172.62, 3440024.54 ]"
+                },
+                {
+                    "test_case_number": 2,
+                    "C0": "np.diag([34044055.73846075, 36753347.53463306, 38766694.48731664, 36664745.76086929, 11963256.63062548])",
+                    "H": "np.identity(5) * 1e-5",
+                    "L": "-np.identity(5) * 1e-5",
+                    "M": "np.identity(5) * 1e-5",
+                    "t0": 0.05,
+                    "steps": 1000,
+                    "expected_output": "[ 34044055.74, 36753347.53, 38766694.49, 36664745.76, 11963256.63 ]"
+                },
+                {
+                    "test_case_number": 3,
+                    "C0": "np.diag([5504117.23331725, 2794825.43714492, 781478.48446118, 2883427.21090874, 27584916.3411524])",
+                    "H": "np.identity(5) * 1e-5",
+                    "L": "-np.identity(5) * 1e-5",
+                    "M": "np.identity(5) * 1e-5",
+                    "t0": 0.02,
+                    "steps": 1000,
+                    "expected_output": "[ 5504117.23, 2794825.44, 781478.48, 2883427.21, 27584916.34 ]"
                 }
             ]
         }
     ]
 }
+
 
