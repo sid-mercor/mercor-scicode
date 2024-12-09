@@ -9,7 +9,7 @@
             "step_number": "72.1",
             "step_name": "neighbor_list",
             "step_description_prompt": "Write a function to return the 4 nearest neighbors of a spin at site $(i, j)$ in a 2D lattice with periodic boundary conditions with lattice of dimension $(N, N)$.",
-            "function_header": "def neighbor_list(site: tuple, N: int) -> list:\n    '''Return all nearest neighbors of site (i, j) in a periodic lattice.\n    Args:\n        site: A tuple (i, j) representing the site indices.\n        N (int): The size of the lattice along one dimension.\n    Returns:\n        a list of tuples, [(i_left, j_left), (i_above, j_above), (i_right, j_right), (i_below, j_below)]\n    '''",
+            "function_header": "def neighbor_list(site: tuple, N: int) -> list:\n    '''Return all nearest neighbors of site (i, j) in a periodic lattice.\n    Args:\n        site: A tuple (i, j) representing the site indices.\n        N (int): The size of the lattice along one dimension.\n    Returns:\n        list: A list of tuples, [(i_left, j_left), (i_above, j_above), (i_right, j_right), (i_below, j_below)]\n    '''",
             "test_cases": [
                 "# Test 1:\nN = 10\nresult = neighbor_list((0, 0), N)\ntarget =[(9, 0), (0, 1), (1, 0), (0, 9)]\nassert result == target, f\"target {target}, but got {result}\"",
                 "# Test 2:\nN = 10\nresult = neighbor_list((9,9), N)\ntarget =[(8, 9), (9, 0), (0, 9), (9, 8)]\nassert result == target, f\"target {target}, but got {result}\"",
