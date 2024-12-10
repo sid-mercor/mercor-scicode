@@ -28,8 +28,7 @@
             "function_header": "def generate_hamiltonian(P, phi, R, l, w, a, n, N, rho, Gamma):",
             "ground_truth_code": "def generate_hamiltonian(P, phi, R, l, w, a, n, N, rho, Gamma):\n    \"\"\"\n    Generate the Hamiltonian matrix for the nanospherical system, including damping.\n\n    Args:\n        P (list): Laser powers for each nanosphere (W).\n        phi (float): Polarization angle (rad).\n        R (float): Distance between adjacent nanospheres (m).\n        l (float): Wavelength of the laser (m).\n        w (float): Beam waist (m).\n        a (float): Radius of the nanospheres (m).\n        n (float): Refractive index of nanospheres.\n        N (int): Number of nanospheres.\n        rho (float): Density of the nanospheres (kg/m\u00b3).\n        Gamma (list): Damping coefficients for each nanosphere.\n\n    Returns:\n        numpy.ndarray: Hamiltonian matrix.\n    \"\"\"\n    import numpy as np\n\n    # Mass of a single nanosphere\n    m = (4 / 3) * np.pi * a**3 * rho\n\n    # Initialize Hamiltonian matrix\n    H = np.zeros((N, N))\n\n    # Calculate diagonal and off-diagonal elements\n    for i in range(N):\n        # Diagonal element: Resonant frequency with damping\n        k_i = calculate_binding_force([P[i], P[i]], phi, R, l, w, a, n)\n        Omega_i = np.sqrt((k_i + Gamma[i]) / m)\n        H[i, i] = Omega_i\n\n        # Off-diagonal coupling elements\n        if i > 0:\n            k_ij = calculate_binding_force([P[i - 1], P[i]], phi, R, l, w, a, n)\n            g_ij = -k_ij / (2 * m * np.sqrt(H[i, i] * H[i - 1, i - 1]))\n            H[i, i - 1] = g_ij\n            H[i - 1, i] = g_ij\n\n    return H",
             "test_cases": [
-                "# Test 1: Two nanospheres",
-                "P = [100e-3, 100e-3]",
+                "# Test 1: Two nanospheres", P = [100e-3, 100e-3]",
                 "phi = np.pi/2",
                 "R = 2 * 1.55e-6",
                 "l = 1.55e-6",
