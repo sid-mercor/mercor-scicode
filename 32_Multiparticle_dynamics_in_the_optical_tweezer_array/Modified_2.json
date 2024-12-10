@@ -34,7 +34,7 @@
         "# Test 4: Larger number of nanospheres\nP = [100e-3] * 10\nphi = np.pi/4\nR = 1.55e-6\nl = 1.55e-6\nw = 600e-9\na = 100e-9\nn = 1.444\nN = 10\nrho = 2.648e3\nGamma = [1e-5] * 10\nH = generate_hamiltonian(P, phi, R, l, w, a, n, N, rho, Gamma)\nassert H.shape == (10, 10)\ntarget = [[5.0, -0.25, 0, 0, 0, 0, 0, 0, 0, 0], [-0.25, 5.0, -0.25, 0, 0, 0, 0, 0, 0, 0], [0, -0.25, 5.0, -0.25, 0, 0, 0, 0, 0, 0], [0, 0, -0.25, 5.0, -0.25, 0, 0, 0, 0, 0], [0, 0, 0, -0.25, 5.0, -0.25, 0, 0, 0, 0], [0, 0, 0, 0, -0.25, 5.0, -0.25, 0, 0, 0], [0, 0, 0, 0, 0, -0.25, 5.0, -0.25, 0, 0], [0, 0, 0, 0, 0, 0, -0.25, 5.0, -0.25, 0], [0, 0, 0, 0, 0, 0, 0, -0.25, 5.0, -0.25], [0, 0, 0, 0, 0, 0, 0, 0, -0.25, 5.0]]\nassert np.allclose(H, target, rtol=1e-4, atol=1e-6)"
     ],
     "return_line": ""
-,}
+},
           {
             "step_number": "32.3",
             "step_name": "Runge-Kutta for Phonon Dynamics",
