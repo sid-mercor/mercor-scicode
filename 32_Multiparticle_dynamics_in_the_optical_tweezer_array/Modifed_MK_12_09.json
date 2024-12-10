@@ -98,7 +98,6 @@
                     "assert np.allclose(H, target, rtol=1e-4, atol=1e-6)"
     }
 ],
-
     "return_line": ""
 },
           {
