@@ -14,10 +14,20 @@
             "function_header": "def calculate_binding_force(P, phi, R, l, w, a, n):",
             "ground_truth_code": "def calculate_binding_force(P, phi, R, l, w, a, n):\n    '''\n    Function to calculate the optical binding force between two trapped nanospheres.\n    '''\n    import numpy as np\n    from scipy.constants import epsilon_0, c\n\n    # Wave number\n    k = 2 * np.pi / l\n    # Scalar polarizability\n    alpha = (4 * np.pi * epsilon_0 * a**3 * (n**2 - 1)) / (n**2 + 2)\n    # Electric fields\n    E1 = np.sqrt(4 * P[0] / (np.pi * w**2 * epsilon_0 * c))\n    E2 = np.sqrt(4 * P[1] / (np.pi * w**2 * epsilon_0 * c))\n    # Forces\n    Fxx = (\n        2 * alpha**2 * E1 * E2 * np.cos(phi)**2 / (8 * np.pi * epsilon_0 * R**4)\n        * (-3 * np.cos(k * R) - 3 * k * R * np.sin(k * R) + (k * R)**2 * np.cos(k * R))\n    )\n    Fxy = (\n        alpha**2 * E1 * E2 * np.sin(phi)**2 / (8 * np.pi * epsilon_0 * R**4)\n        * (3 * np.cos(k * R) + 3 * k * R * np.sin(k * R) - 2 * (k * R)**2 * np.cos(k * R) - (k * R)**3 * np.sin(k * R))\n    )\n    return Fxx + Fxy",
             "test_cases": [
-                "# Test 1: Typical parameters\nP = [10e6, 100e6]\nphi = 1.5708\nR = 1.55e-6\nl = 1.55e-6\nw = 600e-9\na = 100e-9\nn = 1.444\ntarget = -2.17651746535146e-06  # Target optical binding force\nassert np.isclose(calculate_binding_force(P, phi, R, l, w, a, n), target, rtol=1e-4, atol=1e-6)",
-                "# Test 2: Identical powers and zero polarization\nP = [10e6, 10e6]\nphi = 0\nR = 1.55e-6\nl = 1.55e-6\nw = 600e-9\na = 100e-9\nn = 1.444\ntarget = 3.102222e-07  # Example target\nassert np.isclose(calculate_binding_force(P, phi, R, l, w, a, n), target, rtol=1e-4, atol=1e-6)",
-                "# Test 3: Edge case with large beam waist\nP = [1e9, 1e9]\nphi = 0.7854\nR = 1.55e-6\nl = 1.55e-6\nw = 1e-6  # Large beam waist\na = 100e-9\nn = 1.444\ntarget = -1.123456e-06  # Adjust target value\nassert np.isclose(calculate_binding_force(P, phi, R, l, w, a, n), target, rtol=1e-4, atol=1e-6)"
-            ], 
+    "# Test 1: Typical parameters\nP = [10e6, 100e6]\nphi = 1.5708\nR = 1.55e-6\nl = 1.55e-6\nw = 600e-9\na = 100e-9\nn = 1.444\ntarget = -2.17651746535146e-06  # Target optical binding force\nassert np.isclose(calculate_binding_force(P, phi, R, l, w, a, n), target, rtol=1e-4, atol=1e-6)",
+
+    "# Test 2: Identical powers and zero polarization\nP = [10e6, 10e6]\nphi = 0\nR = 1.55e-6\nl = 1.55e-6\nw = 600e-9\na = 100e-9\nn = 1.444\ntarget = 3.102222e-07  # Example target\nassert np.isclose(calculate_binding_force(P, phi, R, l, w, a, n), target, rtol=1e-4, atol=1e-6)",
+
+    "# Test 3: Edge case with large beam waist\nP = [1e9, 1e9]\nphi = 0.7854\nR = 1.55e-6\nl = 1.55e-6\nw = 1e-6  # Large beam waist\na = 100e-9\nn = 1.444\ntarget = -1.123456e-06  # Adjust target value\nassert np.isclose(calculate_binding_force(P, phi, R, l, w, a, n), target, rtol=1e-4, atol=1e-6)",
+
+    "# Test 4: Attraction vs. repulsion transition\nP = [1e6, 1e6]\nphi = 0\nR = 2e-6  # Large distance\nl = 1.55e-6\nw = 600e-9\na = 100e-9\nn = 1.444\ntarget = -5.1e-8  # Expected force in repulsive regime\nassert np.isclose(calculate_binding_force(P, phi, R, l, w, a, n), target, rtol=1e-4, atol=1e-6)",
+
+    "# Test 5: Scaling with power ratios\nP = [10e6, 50e6]  # Unequal powers\nphi = 0\nR = 1.55e-6\nl = 1.55e-6\nw = 600e-9\na = 100e-9\nn = 1.444\ntarget = -1.32e-6  # Adjust target value based on power ratio\nassert np.isclose(calculate_binding_force(P, phi, R, l, w, a, n), target, rtol=1e-4, atol=1e-6)",
+
+    "# Test 6: Polarization effects (orthogonal)\nP = [10e6, 10e6]\nphi = np.pi / 2  # Orthogonal polarization\nR = 1.55e-6\nl = 1.55e-6\nw = 600e-9\na = 100e-9\nn = 1.444\ntarget = 2.5e-7  # Adjust target value for orthogonal polarization\nassert np.isclose(calculate_binding_force(P, phi, R, l, w, a, n), target, rtol=1e-4, atol=1e-6)",
+
+    "# Test 7: Polarization effects (varying angles)\nP = [10e6, 10e6]\nphi = np.pi / 4  # 45-degree polarization\nR = 1.55e-6\nl = 1.55e-6\nw = 600e-9\na = 100e-9\nn = 1.444\ntarget = 1.8e-7  # Adjust target value for 45-degree polarization\nassert np.isclose(calculate_binding_force(P, phi, R, l, w, a, n), target, rtol=1e-4, atol=1e-6)"
+], 
             "return_line": ""
         },
 {
