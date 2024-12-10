@@ -57,38 +57,45 @@
     "return_line": "return np.diag(C).real"}
     ],
     "general_solution": "def solve_multiparticle_dynamics(N, t0, R, l, phi, Gamma, P, n0, w, a, n, rho):\n    \"\"\"\n    Simulates phonon occupation dynamics in an optical tweezer array.\n    \n    Args:\n        N (int): Number of nanospheres.\n        t0 (float): Time for simulation (seconds).\n        R (float): Distance between adjacent nanospheres (meters).\n        l (float): Wavelength of optical tweezers (meters).\n        phi (float): Polarization angle (radians).\n        Gamma (list): Damping coefficients for each nanosphere.\n        P (list): Powers of optical tweezers (Watts).\n        n0 (list): Initial phonon occupation numbers.\n        w (float): Beam waist of optical tweezers (meters).\n        a (float): Radius of nanospheres (meters).\n        n (float): Refractive index of the nanospheres.\n        rho (float): Density of nanospheres (kg/m³).\n    \n    Returns:\n        list: Phonon occupation numbers at time t0.\n    \"\"\"\n    import numpy as np\n    \n    # Helper function to calculate optical binding forces\n    def calculate_binding_force(P, phi, R, l, w, a, n):\n        k = 2 * np.pi / l\n        alpha = (4 * np.pi * epsilon_0 * a**3 * (n**2 - 1)) / (n**2 + 2)\n        E1 = np.sqrt(4 * P[0] / (np.pi * w**2 * epsilon_0 * c))\n        E2 = np.sqrt(4 * P[1] / (np.pi * w**2 * epsilon_0 * c))\n        Fxx = (2 * alpha**2 * E1 * E2 * np.cos(phi)**2 / (8 * np.pi * epsilon_0 * R**4)\n               * (-3 * np.cos(k * R) - 3 * k * R * np.sin(k * R) + (k * R)**2 * np.cos(k * R)))\n        Fxy = (alpha**2 * E1 * E2 * np.sin(phi)**2 / (8 * np.pi * epsilon_0 * R**4)\n               * (3 * np.cos(k * R) + 3 * k * R * np.sin(k * R) - 2 * (k * R)**2 * np.cos(k * R) - (k * R)**3 * np.sin(k * R)))\n        return Fxx + Fxy\n    \n    # Helper function to generate the Hamiltonian\n    def generate_hamiltonian(P, phi, R, l, w, a, n, N, rho, Gamma):\n        m = (4 / 3) * np.pi * a**3 * rho\n        H = np.zeros((N, N), dtype=np.float64)\n        for i in range(N):\n            k_i = calculate_binding_force([P[i], P[i]], phi, R, l, w, a, n)\n            Omega_i = np.sqrt(max((k_i + Gamma[i]) / m, 0))\n            H[i, i] = Omega_i\n            if i > 0:\n                k_ij = calculate_binding_force([P[i - 1], P[i]], phi, R, l, w, a, n)\n                Omega_j = H[i - 1, i - 1]\n                if Omega_i > 0 and Omega_j > 0:\n                    g_ij = -k_ij / (2 * m * np.sqrt(Omega_i * Omega_j))\n                    H[i, i - 1] = g_ij\n                    H[i - 1, i] = g_ij\n        return H\n\n    # Helper function for Runge-Kutta dynamics\n    def runge_kutta_dynamics(C0, H, L, M, t0, steps):\n        delta_t = t0 / steps\n        C = np.array(C0, dtype=np.complex128)\n\n        def commutator(A, B):\n            return np.dot(A, B) - np.dot(B, A)\n\n        def anticommutator(A, B):\n            return np.dot(A, B) + np.dot(B, A)\n\n        for _ in range(steps):\n            k1 = 1j * commutator(H, C) + anticommutator(L, C) + M\n            k2 = 1j * commutator(H, C + 0.5 * k1 * delta_t) + anticommutator(L, C + 0.5 * k1 * delta_t) + M\n            k3 = 1j * commutator(H, C + 0.5 * k2 * delta_t) + anticommutator(L, C + 0.5 * k2 * delta_t) + M\n            k4 = 1j * commutator(H, C + k3 * delta_t) + anticommutator(L, C + k3 * delta_t) + M\n            C += (delta_t / 6) * (k1 + 2 * k2 + 2 * k3 + k4)\n\n        return np.diag(C).real\n\n    H = generate_hamiltonian(P, phi, R, l, w, a, n, N, rho, Gamma)\n    C0 = np.diag(n0)\n    L = -np.diag(Gamma)\n    M = np.diag(Gamma * np.array(n0))\n    nf = runge_kutta_dynamics(C0, H, L, M, t0, 1000)\n    return nf.tolist()",
-    "general_tests": [
+"general_tests": [
     {
         "test_case_number": 1,
-        "N": 2,
-        "t0": 0.02,
-        "R": 1.55e-6,
-        "l": 1.55e-6,
-        "phi": "np.pi / 2",
-        "Gamma": "[1e-5, 1e-5]",
-        "P": "[100e-3, 100e-3]",
-        "n0": "[1, 1]",
-        "w": 600e-9,
-        "a": 100e-9,
-        "n": 1.444,
-        "rho": 2.648e3,
-        "target": "[1.0001, 1.0001]"
+        "description": "Two nanospheres with uniform parameters",
+        "code": "N = 2\n"
+                "t0 = 0.02\n"
+                "R = 1.55e-6\n"
+                "l = 1.55e-6\n"
+                "phi = np.pi / 2\n"
+                "Gamma = [1e-5, 1e-5]\n"
+                "P = [100e-3, 100e-3]\n"
+                "n0 = [1, 1]\n"
+                "w = 600e-9\n"
+                "a = 100e-9\n"
+                "n = 1.444\n"
+                "rho = 2.648e3\n"
+                "target = [1.0001, 1.0001]\n"
+                "result = solve_multiparticle_dynamics(N, t0, R, l, phi, Gamma, P, n0, w, a, n, rho)\n"
+                "assert np.allclose(result, target, rtol=1e-4, atol=1e-6)"
     },
     {
         "test_case_number": 2,
-        "N": 5,
-        "t0": 0.05,
-        "R": 1.55e-6,
-        "l": 1.55e-6,
-        "phi": 0,
-        "Gamma": "[1e-5] * 5",
-        "P": "[100e-3] * 5",
-        "n0": "[1, 2, 3, 4, 5]",
-        "w": 600e-9,
-        "a": 100e-9,
-        "n": 1.444,
-        "rho": 2.648e3,
-        "target": "[1.0001, 2.0001, 3.0001, 4.0001, 5.0001]"
+        "description": "Five nanospheres with damping",
+        "code": "N = 5\n"
+                "t0 = 0.05\n"
+                "R = 1.55e-6\n"
+                "l = 1.55e-6\n"
+                "phi = 0\n"
+                "Gamma = [1e-5] * 5\n"
+                "P = [100e-3] * 5\n"
+                "n0 = [1, 2, 3, 4, 5]\n"
+                "w = 600e-9\n"
+                "a = 100e-9\n"
+                "n = 1.444\n"
+                "rho = 2.648e3\n"
+                "target = [1.0001, 2.0001, 3.0001, 4.0001, 5.0001]\n"
+                "result = solve_multiparticle_dynamics(N, t0, R, l, phi, Gamma, P, n0, w, a, n, rho)\n"
+                "assert np.allclose(result, target, rtol=1e-4, atol=1e-6)"
     }
 ]
+
 }
