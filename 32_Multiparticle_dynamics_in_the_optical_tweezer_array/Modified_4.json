@@ -22,9 +22,9 @@
 
     "# Test 4: Attraction vs. repulsion transition\nP = [1e6, 1e6]\nphi = 0\nR = 2e-6  # Large distance\nl = 1.55e-6\nw = 600e-9\na = 100e-9\nn = 1.444\ntarget = -5.1e-8  # Expected force in repulsive regime\nassert np.isclose(calculate_binding_force(P, phi, R, l, w, a, n), target, rtol=1e-4, atol=1e-6)",
 
-    "# Test 6: Polarization effects (orthogonal)\nP = [10e6, 10e6]\nphi = np.pi / 2  # Orthogonal polarization\nR = 1.55e-6\nl = 1.55e-6\nw = 600e-9\na = 100e-9\nn = 1.444\ntarget = 2.5e-7  # Adjust target value for orthogonal polarization\nassert np.isclose(calculate_binding_force(P, phi, R, l, w, a, n), target, rtol=1e-4, atol=1e-6)",
+    "# Test 5: Polarization effects (orthogonal)\nP = [10e6, 10e6]\nphi = np.pi / 2  # Orthogonal polarization\nR = 1.55e-6\nl = 1.55e-6\nw = 600e-9\na = 100e-9\nn = 1.444\ntarget = 2.5e-7  # Adjust target value for orthogonal polarization\nassert np.isclose(calculate_binding_force(P, phi, R, l, w, a, n), target, rtol=1e-4, atol=1e-6)",
 
-    "# Test 7: Polarization effects (varying angles)\nP = [10e6, 10e6]\nphi = np.pi / 4  # 45-degree polarization\nR = 1.55e-6\nl = 1.55e-6\nw = 600e-9\na = 100e-9\nn = 1.444\ntarget = 1.8e-7  # Adjust target value for 45-degree polarization\nassert np.isclose(calculate_binding_force(P, phi, R, l, w, a, n), target, rtol=1e-4, atol=1e-6)"
+    "# Test 6: Polarization effects (varying angles)\nP = [10e6, 10e6]\nphi = np.pi / 4  # 45-degree polarization\nR = 1.55e-6\nl = 1.55e-6\nw = 600e-9\na = 100e-9\nn = 1.444\ntarget = 1.8e-7  # Adjust target value for 45-degree polarization\nassert np.isclose(calculate_binding_force(P, phi, R, l, w, a, n), target, rtol=1e-4, atol=1e-6)"
 ], 
             "return_line": ""
         },
