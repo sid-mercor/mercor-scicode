@@ -17,7 +17,8 @@
                 "# Test 1: Typical parameters\nP = [10e6, 100e6]\nphi = 1.5708\nR = 1.55e-6\nl = 1.55e-6\nw = 600e-9\na = 100e-9\nn = 1.444\ntarget = -2.17651746535146e-06  # Target optical binding force\nassert np.isclose(calculate_binding_force(P, phi, R, l, w, a, n), target, rtol=1e-4, atol=1e-6)",
                 "# Test 2: Identical powers and zero polarization\nP = [10e6, 10e6]\nphi = 0\nR = 1.55e-6\nl = 1.55e-6\nw = 600e-9\na = 100e-9\nn = 1.444\ntarget = 3.102222e-07  # Example target\nassert np.isclose(calculate_binding_force(P, phi, R, l, w, a, n), target, rtol=1e-4, atol=1e-6)",
                 "# Test 3: Edge case with large beam waist\nP = [1e9, 1e9]\nphi = 0.7854\nR = 1.55e-6\nl = 1.55e-6\nw = 1e-6  # Large beam waist\na = 100e-9\nn = 1.444\ntarget = -1.123456e-06  # Adjust target value\nassert np.isclose(calculate_binding_force(P, phi, R, l, w, a, n), target, rtol=1e-4, atol=1e-6)"
-            ]
+            ], 
+            "return_line": ""
         },
 {
     "step_number": "32.2",
@@ -25,13 +26,71 @@
     "step_description_prompt": "Develop a Python function to compute the Hamiltonian for the provided nanospherical system, considering the damping coefficient array and the linearized optical binding force acting upon the trapped nanospheres.",
     "step_background": "Around the equilibrium position, we can expand the optical binding force as:\n\n$$\\Delta {F_{ij}} = {\\left. {\\Delta R\\frac{{d{F_x}}}{{dR}}} \\right|_{x = \\left| {i - j} \\right|d}} \\equiv {k_{ij}}\\Delta R,$$\n\nthen the linearized dynamics along the tweezer array for the $i$th nanosphere can be written as:\n\n$$m{\\ddot x_i} + \\Gamma_i \\dot{x_i} + k_i{x_i} + \\sum\\limits_{j \\ne i} {{k_{ij}}({x_i} - {x_j})}  = 0.$$ \n\nThe corresponding Hamiltonian reads:\n\n$$H = \\sum\\limits_i {\\left( {\\frac{{p_i^2}}{{2m}} + \\frac{1}{2}{k_i}x_i^2} \\right)}  + \\sum\\limits_{i \\ne j} {\\frac{1}{2}{k_{ij}}{{({x_i} - {x_j})}^2}},$$\n\nand can be quantized as:\n\n$$H=\\sum_i \\hbar \\Omega_i b_i^{\\dagger} b_i+\\hbar \\sum_{i \\neq j} g_{i j}\\left(b_i^{\\dagger} b_j+b_i b_j^{\\dagger}\\right),$$\n\nwhere the resonant frequency is:\n\n$$\\Omega_i=\\sqrt{\\left(k_i+\\sum_{j \\neq i} k_{i j}\\right) / m},$$\n\nand the coupling constant is:\n\n$$g_{i j}=-\\frac{k_{i j}}{2 m \\sqrt{\\Omega_i \\Omega_j}}.$$ \n\nThis Hamiltonian can be expressed in matrix form as $H_{ii}= \\Omega_i$ and $H_{ij} = g_{i j}$. The Hamiltonian represents the coupled oscillatory system, incorporating resonant frequencies, coupling constants, and the damping coefficients between nanospheres. These parameters are derived from linearized binding forces.",
     "function_header": "def generate_hamiltonian(P, phi, R, l, w, a, n, N, rho, Gamma):",
-    "ground_truth_code": "def generate_hamiltonian(P, phi, R, l, w, a, n, N, rho, Gamma):\n    \"\"\"\n    Generate the Hamiltonian matrix for the nanospherical system, including damping.\n\n    Args:\n        P (list): Laser powers for each nanosphere (W).\n        phi (float): Polarization angle (rad).\n        R (float): Distance between adjacent nanospheres (m).\n        l (float): Wavelength of the laser (m).\n        w (float): Beam waist (m).\n        a (float): Radius of the nanospheres (m).\n        n (float): Refractive index of nanospheres.\n        N (int): Number of nanospheres.\n        rho (float): Density of the nanospheres (kg/m³).\n        Gamma (list): Damping coefficients for each nanosphere.\n\n    Returns:\n        numpy.ndarray: Hamiltonian matrix.\n\n    Raises:\n        ValueError: If the input lengths of P or Gamma do not match N.\n    \"\"\"\n    import numpy as np\n\n    if len(P) != N or len(Gamma) != N:\n        raise ValueError(\"The lengths of P and Gamma must match N.\")\n\n    # Mass of a single nanosphere\n    m = (4 / 3) * np.pi * a**3 * rho\n\n    # Initialize Hamiltonian matrix\n    H = np.zeros((N, N))\n\n    # Calculate diagonal and off-diagonal elements\n    for i in range(N):\n        # Diagonal element: Resonant frequency with damping\n        k_i = calculate_binding_force([P[i], P[i]], phi, R, l, w, a, n)\n        Omega_i = np.sqrt((k_i + Gamma[i]) / m)\n        H[i, i] = Omega_i\n\n        # Off-diagonal coupling elements\n        if i > 0:\n            k_ij = calculate_binding_force([P[i - 1], P[i]], phi, R, l, w, a, n)\n            Omega_prev = H[i - 1, i - 1]\n            g_ij = -k_ij / (2 * m * np.sqrt(Omega_i * Omega_prev))\n            H[i, i - 1] = g_ij\n            H[i - 1, i] = g_ij\n\n    return H",
+    "ground_truth_code": "def generate_hamiltonian(P, phi, R, l, w, a, n, N, rho, Gamma):\n    \"\"\"\n    Generate the Hamiltonian matrix for the nanospherical system, including damping.\n\n    Args:\n        P (list): Laser powers for each nanosphere (W).\n        phi (float): Polarization angle (rad).\n        R (float): Distance between adjacent nanospheres (m).\n        l (float): Wavelength of the laser (m).\n        w (float): Beam waist (m).\n        a (float): Radius of the nanospheres (m).\n        n (float): Refractive index of nanospheres.\n        N (int): Number of nanospheres.\n        rho (float): Density of the nanospheres (kg/m³).\n        Gamma (list): Damping coefficients for each nanosphere.\n\n    Returns:\n        numpy.ndarray: Hamiltonian matrix.\n    \"\"\"\n    import numpy as np\n\n    # Mass of a single nanosphere\n    m = (4 / 3) * np.pi * a**3 * rho\n\n    # Initialize Hamiltonian matrix\n    H = np.zeros((N, N))\n\n    # Calculate diagonal and off-diagonal elements\n    for i in range(N):\n        # Diagonal element: Resonant frequency with damping\n        k_i = calculate_binding_force([P[i], P[i]], phi, R, l, w, a, n)\n        Omega_i = np.sqrt((k_i + Gamma[i]) / m)\n        H[i, i] = Omega_i\n\n        # Off-diagonal coupling elements\n        if i > 0:\n            k_ij = calculate_binding_force([P[i - 1], P[i]], phi, R, l, w, a, n)\n            g_ij = -k_ij / (2 * m * np.sqrt(H[i, i] * H[i - 1, i - 1]))\n            H[i, i - 1] = g_ij\n            H[i - 1, i] = g_ij\n\n    return H",
     "test_cases": [
-        "# Test 1: Two nanospheres\nP = [100e-3, 100e-3]\nphi = np.pi/2\nR = 2 * 1.55e-6\nl = 1.55e-6\nw = 600e-9\na = 100e-9\nn = 1.444\nN = 2\nrho = 2.648e3\nGamma = [1e-5, 1e-5]\nH = generate_hamiltonian(P, phi, R, l, w, a, n, N, rho, Gamma)\ntarget = np.array([[5.123, -0.234], [-0.234, 5.123]])\nassert np.allclose(H, target, rtol=1e-4, atol=1e-4)",
-        "# Test 2: Five nanospheres\nP = [100e-3] * 5\nphi = np.pi/4\nR = 1.55e-6\nl = 1.55e-6\nw = 600e-9\na = 100e-9\nn = 1.444\nN = 5\nrho = 2.648e3\nGamma = [1e-5] * 5\nH = generate_hamiltonian(P, phi, R, l, w, a, n, N, rho, Gamma)\ntarget = np.array([[5.123, -0.234, 0, 0, 0], [-0.234, 5.123, -0.234, 0, 0], [0, -0.234, 5.123, -0.234, 0], [0, 0, -0.234, 5.123, -0.234], [0, 0, 0, -0.234, 5.123]])\nassert np.allclose(H, target, rtol=1e-4, atol=1e-4)",
-        "# Test 3: Coupling strength variation with different powers\nP = [100e-3, 200e-3, 300e-3]\nphi = np.pi/3\nR = 1.55e-6\nl = 1.55e-6\nw = 600e-9\na = 100e-9\nn = 1.444\nN = 3\nrho = 2.648e3\nGamma = [1e-5, 2e-5, 3e-5]\nH = generate_hamiltonian(P, phi, R, l, w, a, n, N, rho, Gamma)\ntarget = np.array([[5.123, -0.234, 0], [-0.234, 5.456, -0.345], [0, -0.345, 5.789]])\nassert np.allclose(H, target, rtol=1e-4, atol=1e-4)",
-        "# Test 4: Larger number of nanospheres\nP = [100e-3] * 10\nphi = np.pi/6\nR = 1.55e-6\nl = 1.55e-6\nw = 600e-9\na = 100e-9\nn = 1.444\nN = 10\nrho = 2.648e3\nGamma = [1e-5] * 10\nH = generate_hamiltonian(P, phi, R, l, w, a, n, N, rho, Gamma)\ntarget = np.zeros((10, 10))\ntarget += np.diag([5.123] * 10) + np.diag([-0.234] * 9, k=1) + np.diag([-0.234] * 9, k=-1)\nassert np.allclose(H, target, rtol=1e-4, atol=1e-4)"
-    ]
+        "# Test 1: Two nanospheres",
+        "P = [100e-3, 100e-3]",
+        "phi = np.pi/2",
+        "R = 2 * 1.55e-6",
+        "l = 1.55e-6",
+        "w = 600e-9",
+        "a = 100e-9",
+        "n = 1.444",
+        "N = 2",
+        "rho = 2.648e3",
+        "Gamma = [1e-5, 1e-5]",
+        "H = generate_hamiltonian(P, phi, R, l, w, a, n, N, rho, Gamma)",
+        "assert H.shape == (2, 2)",
+        "target = np.array([[5.123, -0.234], [-0.234, 5.123]])",
+        "assert np.allclose(H, target, rtol=1e-4, atol=1e-6)",
+        "# Test 2: Five nanospheres with uniform parameters",
+        "P = [100e-3] * 5",
+        "phi = 0",
+        "R = 1.55e-6",
+        "l = 1.55e-6",
+        "w = 600e-9",
+        "a = 100e-9",
+        "n = 1.444",
+        "N = 5",
+        "rho = 2.648e3",
+        "Gamma = [1e-5] * 5",
+        "H = generate_hamiltonian(P, phi, R, l, w, a, n, N, rho, Gamma)",
+        "assert H.shape == (5, 5)",
+        "target = np.array([[5.123, -0.234, 0, 0, 0], [-0.234, 5.123, -0.234, 0, 0], [0, -0.234, 5.123, -0.234, 0], [0, 0, -0.234, 5.123, -0.234], [0, 0, 0, -0.234, 5.123]])",
+        "assert np.allclose(H, target, rtol=1e-4, atol=1e-6)",
+        "# Test 3: Coupling strength variation with different powers",
+        "P = [100e-3, 200e-3, 300e-3]",
+        "phi = np.pi/3",
+        "R = 1.55e-6",
+        "l = 1.55e-6",
+        "w = 600e-9",
+        "a = 100e-9",
+        "n = 1.444",
+        "N = 3",
+        "rho = 2.648e3",
+        "Gamma = [1e-5, 2e-5, 3e-5]",
+        "H = generate_hamiltonian(P, phi, R, l, w, a, n, N, rho, Gamma)",
+        "assert H.shape == (3, 3)",
+        "target = np.array([[5.123, -0.234, 0], [-0.234, 5.456, -0.345], [0, -0.345, 5.789]])",
+        "assert np.allclose(H, target, rtol=1e-4, atol=1e-6)",
+        "# Test 4: Larger number of nanospheres",
+        "P = [100e-3] * 10",
+        "phi = np.pi/4",
+        "R = 1.55e-6",
+        "l = 1.55e-6",
+        "w = 600e-9",
+        "a = 100e-9",
+        "n = 1.444",
+        "N = 10",
+        "rho = 2.648e3",
+        "Gamma = [1e-5] * 10",
+        "H = generate_hamiltonian(P, phi, R, l, w, a, n, N, rho, Gamma)",
+        "assert H.shape == (10, 10)",
+        "target = np.zeros((10, 10))",
+        "target += np.diag([5.123] * 10) + np.diag([-0.234] * 9, k=1) + np.diag([-0.234] * 9, k=-1)",
+        "assert np.allclose(H, target, rtol=1e-4, atol=1e-6)"
+    ],
+    "return_line": ""
 },
           {
             "step_number": "32.3",
@@ -44,7 +103,8 @@
                         "{\n  \"test_case_number\": 1,\n  \"C0\": \"np.diag([6762435.17442855, 270122.3810029, 10004196.45838998, 19073172.61665625, 3440024.54245118])\",\n  \"H\": \"np.identity(5) * 1e-5\",\n  \"L\": \"-np.identity(5) * 1e-5\",\n  \"M\": \"np.identity(5) * 1e-5\",\n  \"t0\": 0.02,\n  \"steps\": 100,\n  \"target\": \"[6762435.17, 270122.38, 10004196.46, 19073172.62, 3440024.54]\"\n}",
                         "{\n  \"test_case_number\": 2,\n  \"C0\": \"np.diag([34044055.73846075, 36753347.53463306, 38766694.48731664, 36664745.76086929, 11963256.63062548])\",\n  \"H\": \"np.identity(5) * 1e-5\",\n  \"L\": \"-np.identity(5) * 1e-5\",\n  \"M\": \"np.identity(5) * 1e-5\",\n  \"t0\": 0.05,\n  \"steps\": 1000,\n  \"target\": \"[34044055.74, 36753347.53, 38766694.49, 36664745.76, 11963256.63]\"\n}",
                         "{\n  \"test_case_number\": 3,\n  \"C0\": \"np.diag([5504117.23331725, 2794825.43714492, 781478.48446118, 2883427.21090874, 27584916.3411524])\",\n  \"H\": \"np.identity(5) * 1e-5\",\n  \"L\": \"-np.identity(5) * 1e-5\",\n  \"M\": \"np.identity(5) * 1e-5\",\n  \"t0\": 0.02,\n  \"steps\": 1000,\n  \"target\": \"[5504117.23, 2794825.44, 781478.48, 2883427.21, 27584916.34]\"\n}"
-            ]
+            ],
+              "return_line": ""
         }
     ]
 }
