@@ -60,3 +60,4 @@
             "return_line": "return np.diag(C).real"
         }
     ]
+}
