@@ -36,7 +36,7 @@
         "# Test Case 3\nP = [100e-3, 100e-3, 100e-3, 100e-3, 100e-3]\nphi = 0\nR = 1 * 1550e-9\nl = 1550e-9\nw = 600e-9\na = 100e-9\nn = 1.444\nh = 1e-6\nN = np.size(P)\nrho = 2.648e3\ntarget = [\n    [9.91907992e+05, 9.85573690e+02, 1.29183297e+02, 3.86029400e+01, 1.63260875e+01],\n    [9.85573690e+02, 9.90938753e+05, 9.86100660e+02, 1.29240548e+02, 3.86029400e+01],\n    [1.29183297e+02, 9.86100660e+02, 9.90848130e+05, 9.86100660e+02, 1.29183297e+02],\n    [3.86029400e+01, 1.29240548e+02, 9.86100660e+02, 9.90938753e+05, 9.85573690e+02],\n    [1.63260875e+01, 3.86029400e+01, 1.29183297e+02, 9.85573690e+02, 9.91907992e+05]\n]\noutput = generate_hamiltonian(P, phi, R, l, w, a, n, h, N, rho, num_steps=10000)\nprint(np.array(target))\nprint('---')\nprint(output)\nassert np.allclose(output, target, rtol=1e-2)"
     ],
     "return_line": ""
-}
+},
         {
             "step_number": "32.3",
             "step_name": "Runge-Kutta for Phonon Dynamics",
