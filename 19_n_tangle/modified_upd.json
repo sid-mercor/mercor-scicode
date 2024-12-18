@@ -70,4 +70,3 @@
         "# Test 15: entangled pairs within larger systems\npsi = [np.array([1/np.sqrt(2), 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1/np.sqrt(2), 0, 0, 0]), np.array([0, 0, 0, 0, 0, 0, 0, 1/np.sqrt(2), 0, 0, 0, 1/np.sqrt(2), 0, 0, 0, 0])]\ntarget=[0.0, 0.0]\nfor i in range(2):\n    assert np.isclose(n_tangle(psi[i]), target[i], rtol=1e-4, atol=1e-4)"
     ]
 }
-
