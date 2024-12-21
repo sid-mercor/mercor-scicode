@@ -2,9 +2,9 @@
     "problem_id": "19",
     "problem_name": "n_tangle",
     "problem_description_main": "Write a function that returns the tensor product of $n$ Pauli Y matrices. Using this function, compute the $n$-tangle of an n-qubit pure state, $|\\psi\\rangle$, for even $n$, where $|\\psi\\rangle$ is a complex vector of length $2^n$. The $n$-tangle is a measure of multi-qubit entanglement.",
-    "problem_background_main": "The $n$-tangle of an $n$-qubit pure state $|\\psi\\rangle$ (for even $n$) is defined as:\n\n$\\tau_n = |\\langle \\psi^* | \\sigma_y^{\\otimes n} | \\psi \\rangle|^2$.",
-    "problem_io": "def n_tangle(psi: np.ndarray) -> float:\n    \"\"\"\n    Args:\n        psi (np.ndarray): A 1D array of complex numbers representing the state vector.\n\n    Returns:\n        float: The n-tangle of the state, psi.\n\n    Raises:\n        ValueError: If n is not even.\n    \"\"\"\n",
+    "problem_background_main": "The $n$-tangle of an $n$-qubit pure state $|\\psi\\rangle$ (for even $n$) is defined as:\n\n$\\tau_n = |\\langle \\psi^* | \\sigma_y^{\\otimes n} | \\psi \\rangle|^2$.\n",
     "required_dependencies": "import numpy as np",
+    "problem_io": "def n_tangle(psi: np.ndarray) -> float:\n    \"\"\"\n    Args:\n        psi (np.ndarray): A 1D array of complex numbers representing the state vector.\n\n    Returns:\n        float: The n-tangle of the state, psi.\n\n    Raises:\n        ValueError: If n is not even.\n    \"\"\"\n",
     "sub_steps": [
         {
             "step_number": "19.1",
@@ -51,7 +51,7 @@
             "return_line": ""
         }
     ],
-    "general_solution": "def sigma_y_tensor_power(n: int) -> np.ndarray:\n    \"\"\"\n    Compute the tensor product of n Pauli Y matrices.\n\n    Args:\n        n (int): Number of times to tensor the Pauli Y matrix.\n\n    Returns:\n        np.ndarray: The n-fold tensor product of the Pauli Y matrix.\n    \"\"\"\n    sigma_y = np.array([[0,-1j],[1j,0]])\n    if n == 1:\n        return sigma_y\n    product = sigma_y\n    for _ in range(n-1):\n        product = np.kron(product, sigma_y)\n    return product\ndef n_tangle(psi: np.ndarray) -> float:\n    \"\"\"\n    Compute the n-tangle of an n-qubit pure state for even n.\n\n    Args:\n        psi (np.ndarray): A 1D array of complex numbers with length 2^n for n even.\n\n    Returns:\n        float: The n-tangle.\n\n    Raises:\n        ValueError: If n is not even.\n    \"\"\"\n    n = int(np.log2(len(psi)))\n    if n % 2 != 0:\n        raise ValueError(\"n must be an even number.\")\n    product = sigma_y_tensor_power(n)\n    psi_star = product @ psi\n    tangle = (np.abs(np.vdot(np.conj(psi), psi_star)))**2\n    return tangle",
+    "general_solution": "def sigma_y_tensor_power(n: int) -> np.ndarray:\n    \"\"\"\n    Compute the tensor product of n Pauli Y matrices.\n\n    Args:\n        n (int): Number of times to tensor the Pauli Y matrix.\n\n    Returns:\n        np.ndarray: The n-fold tensor product of the Pauli Y matrix.\n    \"\"\"\n    sigma_y = np.array([[0,-1j],[1j,0]])\n    if n == 1:\n        return sigma_y\n    product = sigma_y\n    for _ in range(n-1):\n        product = np.kron(product, sigma_y)\n    return product\n\ndef n_tangle(psi: np.ndarray) -> float:\n    \"\"\"\n    Compute the n-tangle of an n-qubit pure state for even n.\n\n    Args:\n        psi (np.ndarray): A 1D array of complex numbers with length 2^n for n even.\n\n    Returns:\n        float: The n-tangle.\n\n    Raises:\n        ValueError: If n is not even.\n    \"\"\"\n    n = int(np.log2(len(psi)))\n    if n % 2 != 0:\n        raise ValueError(\"n must be an even number.\")\n    product = sigma_y_tensor_power(n)\n    psi_star = product @ psi\n    tangle = (np.abs(np.vdot(np.conj(psi), psi_star)))**2\n    return tangle",
     "general_tests": [
         "# Test 1: 2-qubit maximally entangled state: (|00⟩ + |11⟩)/√2\npsi = np.array([1, 0, 0, 1]) / np.sqrt(2)\ntarget = 1.0\nassert np.isclose(n_tangle(psi), target, rtol=1e-4, atol=1e-4)",
         "# Test 2: 4-qubit GHZ state:(|0000⟩ + |1111⟩)/√2\npsi = np.zeros(16, dtype=complex)\npsi[0] = 1/np.sqrt(2)\npsi[15] = 1/np.sqrt(2)\ntarget = 1.0\nassert np.isclose(n_tangle(psi), target, rtol=1e-4, atol=1e-4)",
@@ -70,4 +70,3 @@
         "# Test 15: entangled pairs within larger systems\npsi = [np.array([1/np.sqrt(2), 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1/np.sqrt(2), 0, 0, 0]), np.array([0, 0, 0, 0, 0, 0, 0, 1/np.sqrt(2), 0, 0, 0, 1/np.sqrt(2), 0, 0, 0, 0])]\ntarget = [0.0, 0.0]\nfor i in range(2):\n    assert np.isclose(n_tangle(psi[i]), target[i], rtol=1e-4, atol=1e-4)"
     ]
 }
-
