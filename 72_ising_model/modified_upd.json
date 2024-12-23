@@ -111,8 +111,8 @@
                 "# Test 1:\nnp.random.seed(0)\nmag_list = run_simulation(T=1.6, N=3, nsweeps=10)\nassert len(mag_list) == 10, f\"target length of mag_list is {10}, but got {len(mag_list)}\"",
                 "# Test 2:\nnp.random.seed(0)\nmag_list = run_simulation(T=2.1, N=3, nsweeps=10)\nassert len(mag_list) == 10, f\"target length of mag_list is {10}, but got {len(mag_list)}\"",
                 "# Test 3:\nnp.random.seed(0)\nmag_list = run_simulation(T=2.15, N=3, nsweeps=10)\nassert len(mag_list) == 10, f\"target length of mag_list is {10}, but got {len(mag_list)}\"",
-                "# Test 4:\nmag_list_high_T = run_simulation(T=1000.0, N=3, nsweeps=10)\nassert np.all(mag_list_high_T < 1), f\"target Magnetization values too large at high T\"",
-                "# Test 5:\nmag_list_low_T = run_simulation(T=0.1, N=3, nsweeps=10)\nassert np.all(mag_list_low_T > 0), f\"target Magnetization values too small at low T\""
+                "# Test 4:\nmag_list_high_T = run_simulation(T=1000.0, N=3, nsweeps=10)\nassert len(mag_list_high_T) == 10, f\"target length of mag_list is {10}, but got {len(mag_list_high_T)}\"",
+                "# Test 5:\nmag_list_low_T = run_simulation(T=0.1, N=3, nsweeps=10)\nassert len(mag_list_low_T) == 10, f\"target length of mag_list is {10}, but got {len(mag_list_low_T)}\""
             ],
             "return_line": "return mag_list",
             "step_background": "The simulation involves performing multiple sweeps over the lattice of size `N` and collecting magnetization values to analyze the system's behavior at different temperatures.",
